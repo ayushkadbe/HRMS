@@ -18,6 +18,7 @@ const DataGaji = () => {
     const [filterBulan, setFilterBulan] = useState("");
     const [filterNama, setFilterNama] = useState("");
     const [showMessage, setShowMessage] = useState(false);
+    const [mobileLayout, setMobileLayout] = useState('stacked');
 
     const { dataGaji } = useSelector((state) => state.dataGaji);
     const { isError, user } = useSelector((state) => state.auth);
@@ -253,15 +254,15 @@ const DataGaji = () => {
 
             </div>
 
-            <div className='rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mt-6'>
-                <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
-                    <div className="relative flex-2 mb-4 md:mb-0">
+            <div className='rounded-sm border border-stroke bg-white px-4 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mt-6'>
+                <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div className="relative w-full md:max-w-sm">
                         <input
                             type='text'
                             placeholder='Search employee name...'
                             value={filterNama}
                             onChange={handleNamaChange}
-                            className='rounded-lg border-[1.5px] border-stroke bg-transparent py-2 pl-10 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary left-0'
+                            className='w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 pl-10 pr-4 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
                         />
                         <span className='absolute left-2 py-3 text-xl'>
                             <BiSearch />
@@ -269,44 +270,70 @@ const DataGaji = () => {
                     </div>
                 </div>
 
-                <div className='max-w-full overflow-x-auto py-4'>
-                    <table className='w-full table-auto-full'>
+                <div className="mt-2 flex items-center justify-between gap-3 md:hidden">
+                    <p className="text-sm text-gray-5 dark:text-gray-4">Mobile layout</p>
+                    <div className="inline-flex rounded-lg border border-stroke p-1 dark:border-strokedark">
+                        <button
+                            type='button'
+                            onClick={() => setMobileLayout('stacked')}
+                            className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${mobileLayout === 'stacked'
+                                ? 'bg-primary text-white'
+                                : 'text-black dark:text-white'
+                                }`}
+                        >
+                            Stacked
+                        </button>
+                        <button
+                            type='button'
+                            onClick={() => setMobileLayout('horizontal')}
+                            className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${mobileLayout === 'horizontal'
+                                ? 'bg-primary text-white'
+                                : 'text-black dark:text-white'
+                                }`}
+                        >
+                            Horizontal
+                        </button>
+                    </div>
+                </div>
+
+                <div className={`${mobileLayout === 'horizontal' ? 'block' : 'hidden'} md:block w-full overflow-x-scroll overscroll-x-contain py-4 [WebkitOverflowScrolling:touch]`}>
+                    <table className='min-w-[1320px] table-auto-full'>
                         <thead>
                             <tr className='bg-gray-2  dark:bg-meta-4'>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     No
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     NIK
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Employee <br /> Name
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Position
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Base <br /> Salary
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Transport <br /> Allowance
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Meal <br /> Allowance
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Overtime <br /> Hours
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Overtime <br /> Pay
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Potongan
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Total <br /> Salary
                                 </th>
-                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Actions
                                 </th>
                             </tr>
@@ -316,40 +343,40 @@ const DataGaji = () => {
                                 return (
                                     <tr key={data.id}>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>{startIndex + index + 1}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>{startIndex + index + 1}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>{data.nik}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>{data.nik}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>{data.nama_pegawai}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>{data.nama_pegawai}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>{data.jabatan}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>{data.jabatan}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>Rp. {data.gaji_pokok}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>Rp. {data.gaji_pokok}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>Rp. {data.tj_transport}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>Rp. {data.tj_transport}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>Rp. {data.uang_makan}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>Rp. {data.uang_makan}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>{data.jam_lembur}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>{data.jam_lembur}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>Rp. {data.lembur}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>Rp. {data.lembur}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>Rp. {data.potongan}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>Rp. {data.potongan}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <p className='text-black dark:text-white'>Rp. {data.total}</p>
+                                            <p className='whitespace-nowrap text-black dark:text-white'>Rp. {data.total}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
-                                            <div className='flex items-center space-x-3.5'>
+                                            <div className='flex items-center justify-center space-x-3.5 whitespace-nowrap'>
                                                 <Link
                                                     className='hover:text-black'
                                                     to={`/data-gaji/detail-data-gaji/name/${data.nama_pegawai}`}
@@ -363,6 +390,78 @@ const DataGaji = () => {
                             })}
                         </tbody>
                     </table>
+                </div>
+
+                <div className={`${mobileLayout === 'stacked' ? 'grid' : 'hidden'} gap-4 py-4 md:hidden`}>
+                    {filteredDataGaji.slice(startIndex, endIndex).map((data, index) => (
+                        <div
+                            key={data.id}
+                            className='rounded-lg border border-stroke bg-transparent p-4 dark:border-strokedark'
+                        >
+                            <div className='mb-4 flex items-start justify-between gap-3'>
+                                <div>
+                                    <p className='text-xs uppercase tracking-wide text-gray-5 dark:text-gray-4'>
+                                        Salary Record
+                                    </p>
+                                    <p className='text-base font-semibold text-black dark:text-white'>
+                                        {data.nama_pegawai}
+                                    </p>
+                                </div>
+                                <p className='rounded-md bg-gray-2 px-2 py-1 text-xs font-medium text-black dark:bg-meta-4 dark:text-white'>
+                                    #{startIndex + index + 1}
+                                </p>
+                            </div>
+
+                            <div className='grid grid-cols-2 gap-3'>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>NIK</p>
+                                    <p className='text-sm text-black dark:text-white'>{data.nik}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Position</p>
+                                    <p className='text-sm text-black dark:text-white'>{data.jabatan}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Base Salary</p>
+                                    <p className='text-sm text-black dark:text-white'>Rp. {data.gaji_pokok}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Transport Allowance</p>
+                                    <p className='text-sm text-black dark:text-white'>Rp. {data.tj_transport}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Meal Allowance</p>
+                                    <p className='text-sm text-black dark:text-white'>Rp. {data.uang_makan}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Overtime Hours</p>
+                                    <p className='text-sm text-black dark:text-white'>{data.jam_lembur}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Overtime Pay</p>
+                                    <p className='text-sm text-black dark:text-white'>Rp. {data.lembur}</p>
+                                </div>
+                                <div>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Potongan</p>
+                                    <p className='text-sm text-black dark:text-white'>Rp. {data.potongan}</p>
+                                </div>
+                                <div className='col-span-2'>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Total Salary</p>
+                                    <p className='text-sm font-semibold text-black dark:text-white'>Rp. {data.total}</p>
+                                </div>
+                            </div>
+
+                            <div className='mt-4 flex items-center gap-3 border-t border-stroke pt-4 dark:border-strokedark'>
+                                <Link
+                                    className='inline-flex items-center gap-2 text-primary'
+                                    to={`/data-gaji/detail-data-gaji/name/${data.nama_pegawai}`}
+                                >
+                                    <FaRegEye className="text-xl" />
+                                    <span className='text-sm font-medium'>View</span>
+                                </Link>
+                            </div>
+                        </div>
+                    ))}
                 </div>
 
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">

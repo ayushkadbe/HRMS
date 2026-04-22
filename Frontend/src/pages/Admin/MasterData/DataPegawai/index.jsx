@@ -18,6 +18,7 @@ const DataPegawai = () => {
     const [searchKeyword, setSearchKeyword] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
     const [isDownloadingCsv, setIsDownloadingCsv] = useState(false);
+    const [mobileLayout, setMobileLayout] = useState('stacked');
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isError, user } = useSelector((state) => state.auth);
@@ -246,17 +247,17 @@ const DataPegawai = () => {
                     </Link>
                 )}
             </div>
-            <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mt-6">
-                <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
-                    <div className="relative flex-1 md:mr-2 mb-4 md:mb-0">
+            <div className="rounded-sm border border-stroke bg-white px-4 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mt-6">
+                <div className="mt-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+                    <div className="relative w-full md:mr-2 md:max-w-xs">
                         <div className="relative">
-                            <span className="absolute top-1/2 left-48 z-30 -translate-y-1/2 text-xl">
+                            <span className="absolute top-1/2 right-3 z-30 -translate-y-1/2 text-xl">
                                 <MdOutlineKeyboardArrowDown />
                             </span>
                             <select
                                 value={filterStatus}
                                 onChange={handleFilterStatus}
-                                className="relative appearance-none rounded border border-stroke bg-transparent py-3 px-8 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
+                                className="relative w-full appearance-none rounded border border-stroke bg-transparent py-3 pl-4 pr-10 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input"
                             >
                                 <option value="">Status</option>
                                 <option value="Karyawan Tetap">Permanent Employee</option>
@@ -264,13 +265,13 @@ const DataPegawai = () => {
                             </select>
                         </div>
                     </div>
-                    <div className="relative flex-2 mb-4 md:mb-0">
+                    <div className="relative w-full md:max-w-sm">
                         <input
                             type="text"
                             placeholder="Search employee name..."
                             value={searchKeyword}
                             onChange={handleSearch}
-                            className="rounded-lg border-[1.5px] border-stroke bg-transparent py-2 pl-10 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary left-0"
+                            className="w-full rounded-lg border-[1.5px] border-stroke bg-transparent py-2 pl-10 pr-4 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary"
                         />
                         <span className="absolute left-2 py-3 text-xl">
                             <BiSearch />
@@ -278,16 +279,42 @@ const DataPegawai = () => {
                     </div>
                 </div>
 
-                <div className="max-w-full overflow-x-auto py-4">
-                    <table className="w-full table-auto">
+                <div className="mt-2 flex items-center justify-between gap-3 md:hidden">
+                    <p className="text-sm text-gray-5 dark:text-gray-4">Mobile layout</p>
+                    <div className="inline-flex rounded-lg border border-stroke p-1 dark:border-strokedark">
+                        <button
+                            type="button"
+                            onClick={() => setMobileLayout('stacked')}
+                            className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${mobileLayout === 'stacked'
+                                ? 'bg-primary text-white'
+                                : 'text-black dark:text-white'
+                                }`}
+                        >
+                            Stacked
+                        </button>
+                        <button
+                            type="button"
+                            onClick={() => setMobileLayout('horizontal')}
+                            className={`rounded-md px-3 py-1.5 text-sm font-medium transition ${mobileLayout === 'horizontal'
+                                ? 'bg-primary text-white'
+                                : 'text-black dark:text-white'
+                                }`}
+                        >
+                            Horizontal
+                        </button>
+                    </div>
+                </div>
+
+                <div className={`${mobileLayout === 'horizontal' ? 'block' : 'hidden'} md:block w-full overflow-x-scroll overscroll-x-contain py-4 [WebkitOverflowScrolling:touch]`}>
+                    <table className="min-w-[1100px] table-auto">
                         <thead>
                             <tr className="bg-gray-2 text-left dark:bg-meta-4">
                                 <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">No</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Photo</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">NIK</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Employee Name</th>
-                                <th className="py-4 px-4 font-medium text-black dark:text-white">Position</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Gender</th>
+                                <th className="py-4 px-4 font-medium text-black dark:text-white">Designation</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Join Date</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Status</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Access Role</th>
@@ -299,7 +326,7 @@ const DataPegawai = () => {
                                 return (
                                     <tr key={data.id}>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white text-center">{startIndex + index + 1}</p>
+                                            <p className="whitespace-nowrap text-center text-black dark:text-white">{startIndex + index + 1}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 pl-9 dark:border-strokedark">
                                             <div className="h-12.5 w-15">
@@ -309,29 +336,29 @@ const DataPegawai = () => {
                                             </div>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white text-center">{data.nik}</p>
+                                            <p className="whitespace-nowrap text-center text-black dark:text-white">{data.nik}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.nama_pegawai}</p>
-                                        </td>
-                                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.jabatan}</p>
+                                            <p className="whitespace-nowrap text-black dark:text-white">{data.nama_pegawai}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                             <p className="text-black dark:text-white">{data.jenis_kelamin}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.tanggal_masuk}</p>
+                                            <p className="text-black dark:text-white">{data.designation || "-"}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.status}</p>
+                                            <p className="whitespace-nowrap text-black dark:text-white">{data.tanggal_masuk}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.hak_akses}</p>
+                                            <p className="whitespace-nowrap text-black dark:text-white">{data.status}</p>
+                                        </td>
+                                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                                            <p className="whitespace-nowrap text-black dark:text-white">{data.hak_akses}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                             {isAdmin && (
-                                                <div className="flex items-center space-x-3.5">
+                                                <div className="flex items-center space-x-3.5 whitespace-nowrap">
                                                     <Link
                                                         to={`/data-pegawai/form-data-pegawai/edit/${data.id}`}
                                                         className="hover:text-black">
@@ -350,6 +377,82 @@ const DataPegawai = () => {
                             })}
                         </tbody>
                     </table>
+                </div>
+
+                <div className={`${mobileLayout === 'stacked' ? 'grid' : 'hidden'} gap-4 py-4 md:hidden`}>
+                    {filteredDataPegawai.slice(startIndex, endIndex).map((data, index) => (
+                        <div
+                            key={data.id}
+                            className="rounded-lg border border-stroke bg-transparent p-4 dark:border-strokedark"
+                        >
+                            <div className="mb-4 flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-xs uppercase tracking-wide text-gray-5 dark:text-gray-4">
+                                        Employee
+                                    </p>
+                                    <p className="text-base font-semibold text-black dark:text-white">
+                                        {data.nama_pegawai}
+                                    </p>
+                                </div>
+                                <p className="rounded-md bg-gray-2 px-2 py-1 text-xs font-medium text-black dark:bg-meta-4 dark:text-white">
+                                    #{startIndex + index + 1}
+                                </p>
+                            </div>
+
+                            <div className="mb-4 flex items-center gap-3">
+                                <div className="h-14 w-14 overflow-hidden rounded-full">
+                                    <img src={`http://localhost:5000/images/${data.photo}`} alt="Profile Photo" />
+                                </div>
+                                <div>
+                                    <p className="text-sm text-gray-5 dark:text-gray-4">NIK</p>
+                                    <p className="text-sm font-medium text-black dark:text-white">{data.nik}</p>
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 gap-3">
+                                <div>
+                                    <p className="text-xs text-gray-5 dark:text-gray-4">Gender</p>
+                                    <p className="text-sm text-black dark:text-white">{data.jenis_kelamin}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-5 dark:text-gray-4">Designation</p>
+                                    <p className="text-sm text-black dark:text-white">{data.designation || '-'}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-5 dark:text-gray-4">Join Date</p>
+                                    <p className="text-sm text-black dark:text-white">{data.tanggal_masuk}</p>
+                                </div>
+                                <div>
+                                    <p className="text-xs text-gray-5 dark:text-gray-4">Status</p>
+                                    <p className="text-sm text-black dark:text-white">{data.status}</p>
+                                </div>
+                                <div className="col-span-2">
+                                    <p className="text-xs text-gray-5 dark:text-gray-4">Access Role</p>
+                                    <p className="text-sm text-black dark:text-white">{data.hak_akses}</p>
+                                </div>
+                            </div>
+
+                            {isAdmin && (
+                                <div className="mt-4 flex items-center gap-4 border-t border-stroke pt-4 dark:border-strokedark">
+                                    <Link
+                                        to={`/data-pegawai/form-data-pegawai/edit/${data.id}`}
+                                        className="inline-flex items-center gap-2 text-primary"
+                                    >
+                                        <FaRegEdit className="text-xl" />
+                                        <span className="text-sm font-medium">Edit</span>
+                                    </Link>
+                                    <button
+                                        type="button"
+                                        onClick={() => onDeletePegawai(data.id)}
+                                        className="inline-flex items-center gap-2 text-danger"
+                                    >
+                                        <BsTrash3 className="text-xl" />
+                                        <span className="text-sm font-medium">Delete</span>
+                                    </button>
+                                </div>
+                            )}
+                        </div>
+                    ))}
                 </div>
 
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
