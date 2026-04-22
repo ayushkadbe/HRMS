@@ -1,7 +1,14 @@
+LOGIN TO MYSQL:
 mysql -u root -p
 
-Run this one command from the repo terminal:
+CREATE DATABASE:
+CREATE DATABASE db_penggajian3;
+EXIT;
 
+UPDATE:
+Database.js with mysql credentials
+
+IMPORT DATABASE:
 ```powershell
 Get-Content .\Backend\db\db_penggajian3.sql | mysql -u root -p db_penggajian3
 ```
@@ -20,3 +27,9 @@ You should then be able to log in with:
 
 - `aldi / update`
 - `budi / update`
+
+RESET PASSWORD FEATURE:
+
+No register new option available, so use reset-password.js to create new password for user.
+
+Inside /Backend > run node reset-password.js
