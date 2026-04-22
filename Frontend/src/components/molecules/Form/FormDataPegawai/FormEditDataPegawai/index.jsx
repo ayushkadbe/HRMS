@@ -23,6 +23,7 @@ const FormEditDataPegawai = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isError, user } = useSelector((state) => state.auth);
+    const [dataJabatan, setDataJabatan] = useState([]);
 
     const updateUser = async (e) => {
         e.preventDefault();
@@ -81,6 +82,19 @@ const FormEditDataPegawai = () => {
         };
         getUserById();
     }, [id]);
+
+    useEffect(() => {
+        const fetchDataJabatan = async () => {
+            try {
+                const response = await axios.get('http://localhost:5000/data_jabatan');
+                setDataJabatan(Array.isArray(response.data) ? response.data : []);
+            } catch (error) {
+                setMsg('Gagal memuat Position Data');
+            }
+        };
+
+        fetchDataJabatan();
+    }, []);
 
     useEffect(() => {
         dispatch(getMe());
@@ -187,16 +201,26 @@ const FormEditDataPegawai = () => {
                                         <label className='mb-2.5 block text-black dark:text-white'>
                                             Jabatan <span className='text-meta-1'>*</span>
                                         </label>
-                                        <input
-                                            type='text'
-                                            id='jabatan'
-                                            name='jabatan'
-                                            value={jabatan}
-                                            onChange={(e) => setJabatan(e.target.value)}
-                                            required={true}
-                                            placeholder='Masukkan jabatan'
-                                            className='w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
-                                        />
+                                        <div className='relative z-20 bg-transparent dark:bg-form-input'>
+                                            <select
+                                                className='relative z-20 w-full appearance-none rounded border border-stroke bg-transparent py-3 px-5 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
+                                                id='jabatan'
+                                                name='jabatan'
+                                                value={jabatan}
+                                                onChange={(e) => setJabatan(e.target.value)}
+                                                required={true}
+                                            >
+                                                <option value='' disabled={true}>Pilih jabatan</option>
+                                                {dataJabatan.map((item) => (
+                                                    <option key={item.id} value={item.nama_jabatan}>
+                                                        {item.nama_jabatan}
+                                                    </option>
+                                                ))}
+                                            </select>
+                                            <span className='absolute top-1/2 right-4 z-30 -translate-y-1/2 text-2xl'>
+                                                <MdOutlineKeyboardArrowDown />
+                                            </span>
+                                        </div>
                                     </div>
                                     <div className='w-full xl:w-1/2'>
                                         <label className='mb-2.5 block text-black dark:text-white'>

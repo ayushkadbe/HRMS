@@ -203,6 +203,7 @@ const DataPegawai = () => {
                                 <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">Photo</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">NIK</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Employee Name</th>
+                                <th className="py-4 px-4 font-medium text-black dark:text-white">Position</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Gender</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Join Date</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Status</th>
@@ -229,6 +230,9 @@ const DataPegawai = () => {
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                             <p className="text-black dark:text-white">{data.nama_pegawai}</p>
+                                        </td>
+                                        <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
+                                            <p className="text-black dark:text-white">{data.jabatan}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                             <p className="text-black dark:text-white">{data.jenis_kelamin}</p>

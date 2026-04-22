@@ -1,7 +1,28 @@
 import DataPegawai from "../models/DataPegawaiModel.js";
+import DataJabatan from "../models/DataJabatanModel.js";
 import argon2 from "argon2";
 import path from "path";
 import fs from "fs";
+
+const validateJabatanExists = async (jabatan) => {
+    const normalizedJabatan = typeof jabatan === "string" ? jabatan.trim() : "";
+
+    if (!normalizedJabatan) {
+        return "Jabatan wajib dipilih";
+    }
+
+    const existingJabatan = await DataJabatan.findOne({
+        where: {
+            nama_jabatan: normalizedJabatan
+        }
+    });
+
+    if (!existingJabatan) {
+        return "Jabatan harus dipilih dari Position Data";
+    }
+
+    return null;
+};
 
 // menampilkan semua data Pegawai
 export const getDataPegawai = async (req, res) => {
@@ -106,6 +127,11 @@ export const createDataPegawai = async (req, res) => {
         return res.status(400).json({ msg: "Upload Foto Gagal Silahkan Upload Foto Ulang" });
     }
 
+    const jabatanValidationMessage = await validateJabatanExists(jabatan);
+    if (jabatanValidationMessage) {
+        return res.status(400).json({ msg: jabatanValidationMessage });
+    }
+
     const file = req.files.photo;
     const fileSize = file.data.length;
     const ext = path.extname(file.name);
@@ -176,6 +202,11 @@ export const updateDataPegawai = async (req, res) => {
     } = req.body;
 
     try {
+        const jabatanValidationMessage = await validateJabatanExists(jabatan);
+        if (jabatanValidationMessage) {
+            return res.status(400).json({ msg: jabatanValidationMessage });
+        }
+
         await DataPegawai.update({
             nik: nik,
             nama_pegawai: nama_pegawai,
