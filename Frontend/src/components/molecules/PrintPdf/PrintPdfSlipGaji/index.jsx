@@ -12,6 +12,13 @@ import {
 } from "../../../../config/redux/action";
 import { ButtonOne, ButtonTwo } from "../../../atoms";
 
+const formatDateDDMMYYYY = (date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+};
+
 const PrintPdfSlipGaji = () => {
     const componentRef = useRef();
     const dispatch = useDispatch();
@@ -253,7 +260,7 @@ const PrintPdfSlipGaji = () => {
                                     <span>{name}</span>
                                 </div>
                                 <div className="font-medium text-black dark:text-white">
-                                    <span className="text-right">Karawang, {`${new Date().getDate()} ${bulan} ${tahun}`}</span>
+                                    <span className="text-right">Karawang, {formatDateDDMMYYYY(new Date())}</span>
                                     <br />
                                     <span>Finance</span>
                                     <br />
@@ -262,7 +269,7 @@ const PrintPdfSlipGaji = () => {
                                 </div>
                             </div>
                             <div className="italic text-black dark:text-white mt-30">
-                                Printed On: {`${new Date().getDate()} ${bulan} ${tahun}`}
+                                Printed On: {formatDateDDMMYYYY(new Date())}
                             </div>
                         </div>
                     );
