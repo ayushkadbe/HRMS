@@ -1,7 +1,9 @@
 import DataKehadiran from "../models/DataKehadiranModel.js";
+import DataLembur from "../models/DataLemburModel.js";
 import DataPegawai from "../models/DataPegawaiModel.js";
 import DataJabatan from "../models/DataJabatanModel.js";
 import PotonganGaji from "../models/PotonganGajiModel.js";
+import { Op, fn, col } from "sequelize";
 import moment from "moment";
 import "moment/locale/id.js";
 
@@ -179,6 +181,262 @@ export const deleteDataKehadiran = async (req, res) => {
     res.status(200).json({ msg: "Delete data berhasil" });
   } catch (error) {
     console.log(error.msg);
+  }
+};
+
+const validateTanggalLembur = (tanggalLembur) => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const minDate = new Date(today);
+  minDate.setDate(minDate.getDate() - 7);
+
+  const parsedDate = new Date(tanggalLembur);
+  parsedDate.setHours(0, 0, 0, 0);
+
+  if (Number.isNaN(parsedDate.getTime())) {
+    return "Tanggal lembur tidak valid";
+  }
+
+  if (parsedDate > today) {
+    return "Tanggal lembur tidak boleh di masa depan";
+  }
+
+  if (parsedDate < minDate) {
+    return "Tanggal lembur tidak boleh lebih dari 7 hari ke belakang";
+  }
+
+  return null;
+};
+
+const getBulanBoundary = (tanggalLembur) => {
+  const date = new Date(tanggalLembur);
+  const year = date.getFullYear();
+  const month = date.getMonth();
+
+  const start = new Date(year, month, 1);
+  const end = new Date(year, month + 1, 0);
+
+  const startIso = start.toISOString().split("T")[0];
+  const endIso = end.toISOString().split("T")[0];
+
+  return { startIso, endIso };
+};
+
+// method untuk menampilkan semua data lembur
+export const viewDataLembur = async (req, res) => {
+  try {
+    const dataLembur = await DataLembur.findAll({
+      order: [
+        ["tanggal_lembur", "DESC"],
+        ["id", "DESC"],
+      ],
+    });
+    res.status(200).json(dataLembur);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+// method untuk menampilkan data lembur by ID
+export const viewDataLemburByID = async (req, res) => {
+  try {
+    const dataLembur = await DataLembur.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!dataLembur) {
+      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+    }
+
+    res.status(200).json(dataLembur);
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+// method untuk menambah data lembur
+export const createDataLembur = async (req, res) => {
+  const { pegawai_id, tanggal_lembur, jam_lembur, alasan } = req.body;
+
+  if (!pegawai_id || !tanggal_lembur || !jam_lembur || !alasan) {
+    return res.status(400).json({ msg: "Semua field wajib diisi" });
+  }
+
+  const jamLemburNum = Number(jam_lembur);
+  if (!Number.isInteger(jamLemburNum) || jamLemburNum < 1 || jamLemburNum > 6) {
+    return res.status(400).json({ msg: "Jam lembur harus antara 1 sampai 6 jam" });
+  }
+
+  const alasanTrimmed = String(alasan).trim();
+  if (alasanTrimmed.length < 10) {
+    return res.status(400).json({ msg: "Alasan lembur minimal 10 karakter" });
+  }
+
+  const tanggalValidation = validateTanggalLembur(tanggal_lembur);
+  if (tanggalValidation) {
+    return res.status(400).json({ msg: tanggalValidation });
+  }
+
+  try {
+    const pegawai = await DataPegawai.findOne({
+      where: {
+        id: pegawai_id,
+      },
+    });
+
+    if (!pegawai) {
+      return res.status(404).json({ msg: "Data pegawai tidak ditemukan" });
+    }
+
+    const duplicateEntry = await DataLembur.findOne({
+      where: {
+        pegawai_id: pegawai.id,
+        tanggal_lembur,
+      },
+    });
+
+    if (duplicateEntry) {
+      return res
+        .status(400)
+        .json({ msg: "Data lembur untuk pegawai dan tanggal ini sudah ada" });
+    }
+
+    const { startIso, endIso } = getBulanBoundary(tanggal_lembur);
+
+    const monthlyLembur = await DataLembur.findOne({
+      attributes: [[fn("COALESCE", fn("SUM", col("jam_lembur")), 0), "total_jam_lembur"]],
+      where: {
+        pegawai_id: pegawai.id,
+        tanggal_lembur: {
+          [Op.between]: [startIso, endIso],
+        },
+        status: {
+          [Op.in]: ["pending", "approved"],
+        },
+      },
+      raw: true,
+    });
+
+    const totalMonthly = Number(monthlyLembur?.total_jam_lembur || 0);
+    if (totalMonthly + jamLemburNum > 60) {
+      return res
+        .status(400)
+        .json({ msg: "Total lembur bulanan melebihi batas 60 jam" });
+    }
+
+    await DataLembur.create({
+      pegawai_id: pegawai.id,
+      nik: pegawai.nik,
+      nama_pegawai: pegawai.nama_pegawai,
+      tanggal_lembur,
+      jam_lembur: jamLemburNum,
+      alasan: alasanTrimmed,
+      status: "pending",
+    });
+
+    res.status(201).json({ msg: "Data lembur berhasil disimpan" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+// method untuk update status approve data lembur
+export const approveDataLembur = async (req, res) => {
+  try {
+    const dataLembur = await DataLembur.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!dataLembur) {
+      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+    }
+
+    if (dataLembur.status !== "pending") {
+      return res.status(400).json({ msg: "Hanya data pending yang dapat di-approve" });
+    }
+
+    await DataLembur.update(
+      {
+        status: "approved",
+        approved_by: String(req.userId || "admin"),
+        approved_at: new Date(),
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+
+    res.status(200).json({ msg: "Data lembur berhasil di-approve" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+// method untuk update status reject data lembur
+export const rejectDataLembur = async (req, res) => {
+  try {
+    const dataLembur = await DataLembur.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!dataLembur) {
+      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+    }
+
+    if (dataLembur.status !== "pending") {
+      return res.status(400).json({ msg: "Hanya data pending yang dapat di-reject" });
+    }
+
+    await DataLembur.update(
+      {
+        status: "rejected",
+        approved_by: String(req.userId || "admin"),
+        approved_at: new Date(),
+      },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+
+    res.status(200).json({ msg: "Data lembur berhasil di-reject" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
+  }
+};
+
+// method untuk delete data lembur
+export const deleteDataLembur = async (req, res) => {
+  try {
+    const dataLembur = await DataLembur.findOne({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    if (!dataLembur) {
+      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+    }
+
+    await DataLembur.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+
+    res.status(200).json({ msg: "Data lembur berhasil dihapus" });
+  } catch (error) {
+    res.status(500).json({ msg: error.message });
   }
 };
 

@@ -10,6 +10,7 @@ import {
   FormAddDataJabatan,
   FormEditDataJabatan,
   FormAddDataKehadiran,
+  FormAddDataLembur,
   FormEditDataKehadiran,
   FormAddDataPegawai,
   FormEditDataPegawai,
@@ -25,6 +26,7 @@ import {
   DataPegawai,
   DataJabatan,
   DataKehadiran,
+  DataLembur,
   DataGaji,
   LaporanGaji,
   LaporanAbsensi,
@@ -84,6 +86,14 @@ const AppRoutes = () => {
       <Route
         path='/data-kehadiran/form-data-kehadiran/edit/:id'
         element={<FormEditDataKehadiran />}
+      />
+      <Route
+        path='/data-lembur'
+        element={<DataLembur />}
+      />
+      <Route
+        path='/data-lembur/form-data-lembur/add'
+        element={<FormAddDataLembur />}
       />
       <Route
         path='/data-potongan'

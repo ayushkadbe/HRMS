@@ -28,6 +28,12 @@ import {
     updateDataKehadiran,
     deleteDataKehadiran,
     viewDataKehadiranByID,
+    viewDataLembur,
+    viewDataLemburByID,
+    createDataLembur,
+    approveDataLembur,
+    rejectDataLembur,
+    deleteDataLembur,
     viewDataGajiByName,
 } from "../controllers/TransaksiController.js";
 
@@ -92,6 +98,13 @@ router.get('/data_kehadiran/:id', verifyUser, adminOnly, viewDataKehadiranByID);
 router.post('/data_kehadiran',verifyUser, adminOnly, createDataKehadiran);
 router.patch('/data_kehadiran/update/:id',verifyUser, adminOnly, updateDataKehadiran);
 router.delete('/data_kehadiran/:id', verifyUser, adminOnly, deleteDataKehadiran);
+// Data Lembur
+router.get('/data_lembur', verifyUser, adminOnly, viewDataLembur);
+router.get('/data_lembur/:id', verifyUser, adminOnly, viewDataLemburByID);
+router.post('/data_lembur', verifyUser, adminOnly, createDataLembur);
+router.patch('/data_lembur/:id/approve', verifyUser, adminOnly, approveDataLembur);
+router.patch('/data_lembur/:id/reject', verifyUser, adminOnly, rejectDataLembur);
+router.delete('/data_lembur/:id', verifyUser, adminOnly, deleteDataLembur);
 // Data Potongan
 router.get('/data_potongan', adminOnly, verifyUser, viewDataPotongan);
 router.get('/data_potongan/:id', adminOnly, verifyUser, viewDataPotonganByID);

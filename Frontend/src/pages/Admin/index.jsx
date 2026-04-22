@@ -5,6 +5,7 @@ import DataJabatan from './MasterData/DataJabatan';
 import DataPegawai from './MasterData/DataPegawai';
 import UbahPasswordAdmin from './PengaturanAdmin/UbahPasswordAdmin';
 import DataKehadiran from './Transaksi/DataKehadiran';
+import DataLembur from './Transaksi/DataLembur';
 import DataGaji from './Transaksi/DataGaji';
 import DataPotongan from './Transaksi/DataPotongan';
 
@@ -16,6 +17,7 @@ export {
     DataPegawai,
     UbahPasswordAdmin,
     DataKehadiran,
+    DataLembur,
     DataGaji,
     DataPotongan
 };

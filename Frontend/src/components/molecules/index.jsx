@@ -6,6 +6,7 @@ import FormAddDataJabatan from "./Form/FormDataJabatan/FormAddDataJabatan";
 import FormEditDataJabatan from "./Form/FormDataJabatan/FormEditDataJabatan";
 import FormAddDataKehadiran from "./Form/FormDataKehadiran/FormAddDataKehadiran";
 import FormEditDataKehadiran from "./Form/FormDataKehadiran/FormEditDataKehadiran";
+import FormAddDataLembur from "./Form/FormDataLembur/FormAddDataLembur";
 import FormAddDataPegawai from "./Form/FormDataPegawai/FormAddDataPegawai";
 import FormEditDataPegawai from "./Form/FormDataPegawai/FormEditDataPegawai";
 import FormAddDataPotongan from "./Form/FormDataPotongan/FormAddDataPotongan";
@@ -28,6 +29,7 @@ export {
     Footer,
     FormAddDataJabatan,
     FormAddDataKehadiran,
+    FormAddDataLembur,
     FormEditDataKehadiran,
     FormEditDataJabatan,
     FormAddDataPegawai,
