@@ -75,12 +75,12 @@ const PrintPdfLaporanAbsensi = () => {
             <div className="flex flex-col md:flex-row w-full gap-3 text-center p-6 bg-white dark:bg-meta-4">
                 <div>
                     <ButtonOne onClick={handlePrint}>
-                        <span>Cetak</span>
+                        <span>Print</span>
                     </ButtonOne>
                 </div>
                 <Link to="/laporan/absensi">
                     <ButtonTwo>
-                        <span>Kembali</span>
+                        <span>Back</span>
                     </ButtonTwo>
                 </Link>
             </div >
@@ -100,17 +100,17 @@ const PrintPdfLaporanAbsensi = () => {
                     />
                 </div>
                 <h1 className="text-center text-black my-4 text-xl font-medium boder py-2 dark:text-white">
-                    Laporan Kehadiran Pegawai
+                    Employee Attendance Report
                 </h1>
                 <div className="w-full md:text-lg">
                     <h2 className="font-medium mb-4 block text-black dark:text-white">
-                        <span className="inline-block w-32 md:w-40">Bulan</span>
+                        <span className="inline-block w-32 md:w-40">Month</span>
                         <span className="pl-[-8] md:pl-0"></span>
                         <span className="inline-block w-7">:</span>
                         {month}
                     </h2>
                     <h2 className="font-medium mb-4 block text-black dark:text-white">
-                        <span className="inline-block w-32 md:w-40">Tahun</span>
+                        <span className="inline-block w-32 md:w-40">Year</span>
                         <span className="inline-block w-7">:</span>
                         {year}
                         <span className="pl-[-8] md:pl-0"></span>
@@ -127,10 +127,10 @@ const PrintPdfLaporanAbsensi = () => {
                                     NIK
                                 </th>
                                 <th className="font-medium text-black border-t border-l border-b border-black dark:border-white dark:text-white">
-                                    Nama <br /> Pegawai
+                                    Employee <br /> Name
                                 </th>
                                 <th className="font-medium text-black border-t border-l border-b border-black dark:border-white dark:text-white">
-                                    Jabatan
+                                    Position
                                 </th>
                                 <th className="font-medium text-black border-t border-l border-b border-black dark:border-white dark:text-white">
                                     Hadir
@@ -181,11 +181,11 @@ const PrintPdfLaporanAbsensi = () => {
                         <span className="p-26">Finance</span>
                         <br />
                         <br />
-                        <span className="p-8 italic text-black dark:text-white">Tanda Tangan</span>
+                        <span className="p-8 italic text-black dark:text-white">Signature</span>
                     </div>
                 </div>
                 <div className="italic text-black dark:text-white mt-70">
-                    Dicetak Pada : {`${new Date().getDate()} ${bulan} ${tahun}`}
+                    Printed On: {`${new Date().getDate()} ${bulan} ${tahun}`}
                 </div>
             </div>
         </>

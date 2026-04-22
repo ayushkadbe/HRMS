@@ -141,10 +141,10 @@ const DataJabatan = () => {
 
     return (
         <Layout>
-            <Breadcrumb pageName='Data Jabatan' />
+            <Breadcrumb pageName='Position Data' />
             <Link to="/data-jabatan/form-data-jabatan/add" >
                 <ButtonOne  >
-                    <span>Tambah Jabatan</span>
+                    <span>Add Position</span>
                     <span>
                         <FaPlus />
                     </span>
@@ -155,7 +155,7 @@ const DataJabatan = () => {
                     <div className="relative flex-2 mb-4 md:mb-0">
                         <input
                             type='text'
-                            placeholder='Cari jabatan...'
+                            placeholder='Search position...'
                             value={searchKeyword}
                             onChange={handleSearch}
                             className='rounded-lg border-[1.5px] border-stroke bg-transparent py-2 pl-10 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary left-0'
@@ -174,19 +174,19 @@ const DataJabatan = () => {
                                     No
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Jabatan
+                                    Position
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Gaji Pokok
+                                    Base Salary
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Tunjangan Transport
+                                    Transport Allowance
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Uang Makan
+                                    Meal Allowance
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Aksi
+                                    Actions
                                 </th>
                             </tr>
                         </thead>
@@ -234,7 +234,7 @@ const DataJabatan = () => {
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
                     <div className="flex items-center space-x-2">
                         <span className="text-gray-5 dark:text-gray-4 text-sm py-4">
-                            Menampilkan {startIndex + 1}-{Math.min(endIndex, filteredDataJabatan.length)} dari {filteredDataJabatan.length} Data Jabatan
+                            Showing {startIndex + 1}-{Math.min(endIndex, filteredDataJabatan.length)} of {filteredDataJabatan.length} position records
                         </span>
                     </div>
                     <div className="flex space-x-2 py-4">

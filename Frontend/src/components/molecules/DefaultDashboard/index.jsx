@@ -52,12 +52,12 @@ const DefaultDashboard = () => {
                 <>
                     <div className="mt-6">
                         <h2 className="px-4 py-2 text-meta-3 font-medium text-center md:text-left">
-                            Selamat Datang di SiPeKa Anda Login Sebagai Pegawai.
+                            Welcome to SiPeKa. You are logged in as an employee.
                         </h2>
                     </div>
                     <div className="py-2 px-4 md:px-6 dark:border-strokedark text-lg">
                         <h3 className="font-medium text-black dark:text-white text-center md:text-left">
-                            Data Pegawai
+                            Employee Data
                         </h3>
                     </div>
                     <div className="flex flex-col md:flex-row rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark mt-2">
@@ -71,20 +71,20 @@ const DefaultDashboard = () => {
                         <div className="md:w-2/3 px-4 md:px-20 py-4 md:py-20">
                             <div className="w-full md:text-lg">
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Nik</span>
+                                    <span className="inline-block w-32 md:w-40">NIK</span>
                                     <span className="inline-block w-7">:</span>{dataPegawai.nik}
                                 </h2>
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Nama Pegawai</span>
+                                    <span className="inline-block w-32 md:w-40">Employee Name</span>
                                     <span className="inline-block w-7">:</span>{' '}
                                     <span className="pl-[-10] md:pl-0"></span>{dataPegawai.nama_pegawai}
                                 </h2>
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Tanggal Masuk</span>
+                                    <span className="inline-block w-32 md:w-40">Join Date</span>
                                     <span className="inline-block w-7">:</span>{dataPegawai.tanggal_masuk}
                                 </h2>
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Jabatan</span>
+                                    <span className="inline-block w-32 md:w-40">Position</span>
                                     <span className="inline-block w-7">:</span>{dataPegawai.jabatan}
                                     <span className="pl-[-8] md:pl-0"></span>
                                 </h2>

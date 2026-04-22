@@ -142,10 +142,10 @@ const DataPotongan = () => {
 
     return (
         <Layout>
-            <Breadcrumb pageName='Data Potongan' />
+            <Breadcrumb pageName='Deduction Data' />
             <Link to="/data-potongan/form-data-potongan/add" >
                 <ButtonOne  >
-                    <span>Tambah Potongan</span>
+                    <span>Add Deduction</span>
                     <span>
                         <FaPlus />
                     </span>
@@ -156,7 +156,7 @@ const DataPotongan = () => {
                     <div className="relative flex-2 mb-4 md:mb-0">
                         <input
                             type='text'
-                            placeholder='Cari Potongan..'
+                            placeholder='Search deduction...'
                             value={searchKeyword}
                             onChange={handleSearch}
                             className='rounded-lg border-[1.5px] border-stroke bg-transparent py-2 pl-10 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary left-0'
@@ -175,13 +175,13 @@ const DataPotongan = () => {
                                     No
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Potongan Gaji
+                                    Salary Deduction
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Jumlah Potongan
+                                    Deduction Amount
                                 </th>
                                 <th className='py-4 px-4 font-medium text-black dark:text-white'>
-                                    Aksi
+                                    Actions
                                 </th>
                             </tr>
                         </thead>
@@ -224,7 +224,7 @@ const DataPotongan = () => {
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
                     <div className="flex items-center space-x-2">
                         <span className="text-gray-5 dark:text-gray-4 text-sm py-4">
-                            Menampilkan {startIndex + 1}-{Math.min(endIndex, filteredDataPotongan.length)} dari {filteredDataPotongan.length} Data Potongan
+                            Showing {startIndex + 1}-{Math.min(endIndex, filteredDataPotongan.length)} of {filteredDataPotongan.length} deduction records
                         </span>
                     </div>
                     <div className="flex space-x-2 py-4">

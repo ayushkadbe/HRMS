@@ -113,7 +113,7 @@ const DropdownProfil = () => {
             <img
               className='h-full w-full object-cover'
               src={`http://localhost:5000/images/${dataPegawai.photo}`}
-              alt='Profil'
+              alt='Profile'
             />
           </div>
           <MdKeyboardArrowDown className='text-xl' />
@@ -132,7 +132,7 @@ const DropdownProfil = () => {
                 className='flex items-center gap-3.5 text-sm font-medium duration-300 ease-in-out hover:text-primary lg:text-base'
               >
                 <FiSettings className='text-xl' />
-                Pengaturan
+                Settings
               </Link>
             </li>
             <li>

@@ -68,12 +68,12 @@ const PrintPdfDataGajiPegawai = () => {
             <div className="flex flex-col md:flex-row w-full gap-3 text-center p-6 bg-white dark:bg-meta-4">
                 <div>
                     <ButtonOne onClick={handlePrint}>
-                        <span>Cetak</span>
+                        <span>Print</span>
                     </ButtonOne>
                 </div>
                 <Link to="/data-gaji-pegawai">
                     <ButtonTwo>
-                        <span>Kembali</span>
+                        <span>Back</span>
                     </ButtonTwo>
                 </Link>
             </div >
@@ -96,11 +96,11 @@ const PrintPdfDataGajiPegawai = () => {
                                 />
                             </div>
                             <h1 className="text-center text-black dark:text-white my-4 text-xl font-medium boder py-2">
-                                Daftar Gaji Pegawai
+                                Employee Salary List
                             </h1>
                             <div className="w-full md:text-lg">
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Nama Pegawai</span>
+                                    <span className="inline-block w-32 md:w-40">Employee Name</span>
                                     <span className="pl-[-8] md:pl-0"></span>
                                     <span className="inline-block w-7">:</span>
                                     {data.nama_pegawai}
@@ -112,19 +112,19 @@ const PrintPdfDataGajiPegawai = () => {
                                     {data.nik}
                                 </h2>
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Jabatan</span>
+                                    <span className="inline-block w-32 md:w-40">Position</span>
                                     <span className="pl-[-8] md:pl-0"></span>
                                     <span className="inline-block w-7">:</span>
                                     {data.jabatan}
                                 </h2>
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Bulan</span>
+                                    <span className="inline-block w-32 md:w-40">Month</span>
                                     <span className="pl-[-8] md:pl-0"></span>
                                     <span className="inline-block w-7">:</span>
                                     {month}
                                 </h2>
                                 <h2 className="font-medium mb-4 block text-black dark:text-white">
-                                    <span className="inline-block w-32 md:w-40">Tahun</span>
+                                    <span className="inline-block w-32 md:w-40">Year</span>
                                     <span className="inline-block w-7">:</span>
                                     {year}
                                     <span className="pl-[-8] md:pl-0"></span>
@@ -139,10 +139,10 @@ const PrintPdfDataGajiPegawai = () => {
                                                 No
                                             </th>
                                             <th className='py-4 px-4 border-t border-l text-center font-medium text-black dark:text-white'>
-                                                Keterangan
+                                                Description
                                             </th>
                                             <th className='py-4 px-4 border-t text-center border-l border-r font-medium text-black dark:text-white'>
-                                                Jumlah
+                                                Amount
                                             </th>
                                         </tr>
                                     </thead>
@@ -152,7 +152,7 @@ const PrintPdfDataGajiPegawai = () => {
                                                 {index + 1}
                                             </td>
                                             <td className='border-b border-black border-t border-l dark:border-white py-5 px-4 text-black dark:text-white'>
-                                                Gaji Pokok
+                                                Base Salary
                                             </td>
                                             <td className='border-b border-black border-t border-l border-r dark:border-white py-5 px-4 text-black dark:text-white'>
                                                 Rp. {data.gaji_pokok}
@@ -163,7 +163,7 @@ const PrintPdfDataGajiPegawai = () => {
                                                 {index + 2}
                                             </td>
                                             <td className='border-b border-black border-t border-l dark:border-white py-5 px-4 text-black dark:text-white'>
-                                                Tunjangan Transportasi
+                                                Transport Allowance
                                             </td>
                                             <td className='border-b border-black border-t border-l border-r dark:border-white py-5 px-4 text-black dark:text-white'>
                                                 Rp. {data.tj_transport}
@@ -174,7 +174,7 @@ const PrintPdfDataGajiPegawai = () => {
                                                 {index + 3}
                                             </td>
                                             <td className='border-b border-black border-t border-l dark:border-white py-5 px-4 text-black dark:text-white'>
-                                                Uang Makan
+                                                Meal Allowance
                                             </td>
                                             <td className='border-b border-black border-t border-l border-r dark:border-white py-5 px-4 text-black dark:text-white'>
                                                 Rp. {data.uang_makan}
@@ -185,7 +185,7 @@ const PrintPdfDataGajiPegawai = () => {
                                                 {index + 4}
                                             </td>
                                             <td className='border-b border-black border-t border-l dark:border-white py-5 px-4 text-black dark:text-white'>
-                                                Potongan
+                                                Deduction
                                             </td>
                                             <td className='border-b border-black border-t border-l border-r dark:border-white py-5 px-4 text-black dark:text-white'>
                                                 Rp. {data.potongan}
@@ -195,7 +195,7 @@ const PrintPdfDataGajiPegawai = () => {
                                             <td className='border-b border-black border-t border-l dark:border-white py-5 px-4 text-black dark:text-white'>
                                             </td>
                                             <td className='font-medium border-b border-black dark:border-white py-5 px-2 text-right text-black dark:text-white'>
-                                                Total Gaji :
+                                                Total Salary:
                                             </td>
                                             <td className='font-medium border-b border-black border-t border-l border-r dark:border-white py-5 px-4 text-black dark:text-white'>
                                                 Rp. {data.total}
@@ -206,7 +206,7 @@ const PrintPdfDataGajiPegawai = () => {
                             </div>
                             <div className="py-6 flex justify-between items-center">
                                 <div className="font-medium text-black dark:text-white">
-                                    <span className="p-6">Pegawai</span>
+                                    <span className="p-6">Employee</span>
                                     <br />
                                     <br />
                                     <br />
@@ -219,11 +219,11 @@ const PrintPdfDataGajiPegawai = () => {
                                     <span>Finance</span>
                                     <br />
                                     <br />
-                                    <span className="p-8 italic text-black dark:text-white">Tanda Tangan</span>
+                                    <span className="p-8 italic text-black dark:text-white">Signature</span>
                                 </div>
                             </div>
                             <div className="italic text-black dark:text-white mt-30">
-                                Dicetak Pada : {`${new Date().getDate()} ${bulan} ${tahun}`}
+                                Printed On: {`${new Date().getDate()} ${bulan} ${tahun}`}
                             </div>
                         </div>
                     );
