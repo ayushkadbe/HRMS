@@ -1,7 +1,7 @@
 import express from 'express';
 
 /* === import Middleware === */
-import { adminOnly, verifyUser } from '../middleware/AuthUser.js';
+import { adminOnly, adminOrSiteManager, verifyUser } from '../middleware/AuthUser.js';
 
 /* === import Controllers === */
 import {
@@ -76,32 +76,32 @@ const router = express.Router();
 
 /* ==== Master Data ==== */
 // Data Pegawai
-router.get('/data_pegawai', verifyUser, adminOnly, getDataPegawai);
-router.get('/data_pegawai/id/:id', verifyUser, adminOnly, getDataPegawaiByID);
-router.get('/data_pegawai/nik/:nik', verifyUser, adminOnly, getDataPegawaiByNik);
+router.get('/data_pegawai', verifyUser, adminOrSiteManager, getDataPegawai);
+router.get('/data_pegawai/id/:id', verifyUser, adminOrSiteManager, getDataPegawaiByID);
+router.get('/data_pegawai/nik/:nik', verifyUser, adminOrSiteManager, getDataPegawaiByNik);
 router.get('/data_pegawai/name/:name', verifyUser, getDataPegawaiByName);
 router.post('/data_pegawai',verifyUser, adminOnly, createDataPegawai);
 router.patch('/data_pegawai/:id', verifyUser, adminOnly, updateDataPegawai);
 router.delete('/data_pegawai/:id', verifyUser, adminOnly, deleteDataPegawai);
 router.patch('/data_pegawai/:id/change_password', verifyUser, adminOnly, changePassword);
 // Data Jabatan
-router.get('/data_jabatan', verifyUser, adminOnly, getDataJabatan);
-router.get('/data_jabatan/:id', verifyUser, adminOnly, getDataJabatanByID);
+router.get('/data_jabatan', verifyUser, adminOrSiteManager, getDataJabatan);
+router.get('/data_jabatan/:id', verifyUser, adminOrSiteManager, getDataJabatanByID);
 router.post('/data_jabatan', verifyUser, adminOnly, createDataJabatan);
 router.patch('/data_jabatan/:id', verifyUser, adminOnly, updateDataJabatan);
 router.delete('/data_jabatan/:id', verifyUser, adminOnly, deleteDataJabatan);
 
 /* ==== Transaksi  ==== */
 // Data Kehadiran
-router.get('/data_kehadiran', verifyUser, adminOnly, viewDataKehadiran);
-router.get('/data_kehadiran/:id', verifyUser, adminOnly, viewDataKehadiranByID);
+router.get('/data_kehadiran', verifyUser, adminOrSiteManager, viewDataKehadiran);
+router.get('/data_kehadiran/:id', verifyUser, adminOrSiteManager, viewDataKehadiranByID);
 router.post('/data_kehadiran',verifyUser, adminOnly, createDataKehadiran);
 router.patch('/data_kehadiran/update/:id',verifyUser, adminOnly, updateDataKehadiran);
 router.delete('/data_kehadiran/:id', verifyUser, adminOnly, deleteDataKehadiran);
 // Data Lembur
-router.get('/data_lembur', verifyUser, adminOnly, viewDataLembur);
-router.get('/data_lembur/:id', verifyUser, adminOnly, viewDataLemburByID);
-router.post('/data_lembur', verifyUser, adminOnly, createDataLembur);
+router.get('/data_lembur', verifyUser, adminOrSiteManager, viewDataLembur);
+router.get('/data_lembur/:id', verifyUser, adminOrSiteManager, viewDataLemburByID);
+router.post('/data_lembur', verifyUser, adminOrSiteManager, createDataLembur);
 router.patch('/data_lembur/:id/approve', verifyUser, adminOnly, approveDataLembur);
 router.patch('/data_lembur/:id/reject', verifyUser, adminOnly, rejectDataLembur);
 router.delete('/data_lembur/:id', verifyUser, adminOnly, deleteDataLembur);

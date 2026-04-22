@@ -158,3 +158,55 @@ ORDER BY tahun DESC, bulan_angka DESC;
   - `tarif_lembur_per_jam = (gaji_pokok / 30 / 8) * overtime_multiplier`
   - `overtime_multiplier` currently set to `1`
   - no DB schema change required for this adjustment
+
+PHASE 3 (SITE MANAGER ROLE SPLIT) - DB NOTES:
+
+- No table/migration changes were required.
+- `site_manager` is stored in existing `data_pegawai.hak_akses` column.
+- To verify or update role values:
+
+```sql
+USE db_penggajian3;
+
+-- Verify users with site_manager access
+SELECT id, nama_pegawai, username, hak_akses
+FROM data_pegawai
+WHERE hak_akses = 'site_manager';
+
+-- Optional: set existing user as site manager
+UPDATE data_pegawai
+SET hak_akses = 'site_manager'
+WHERE username = 'your_username';
+```
+
+PHASE 3.1 (SITE ADMIN ROLE UPDATE) - DB NOTES:
+
+- Use `site_admin` as the operational role value in `data_pegawai.hak_akses`.
+- Existing `site_manager` role is still accepted in middleware for backward compatibility.
+
+```sql
+USE db_penggajian3;
+
+-- Move old site_manager users to site_admin
+UPDATE data_pegawai
+SET hak_akses = 'site_admin'
+WHERE hak_akses = 'site_manager';
+
+-- Verify role assignment
+SELECT id, nama_pegawai, username, hak_akses
+FROM data_pegawai
+WHERE hak_akses IN ('site_admin', 'site_manager');
+```
+
+PHASE 3.2 (SITE MANAGER MENU ALIGNMENT) - DB NOTES:
+
+- No schema/migration changes required.
+- Role behavior changes are UI + route guard adjustments only.
+- `site_manager` and `site_admin` values remain valid in `data_pegawai.hak_akses`.
+- Recommended verification:
+
+```sql
+USE db_penggajian3;
+SELECT id, username, hak_akses FROM data_pegawai
+WHERE hak_akses IN ('site_admin', 'site_manager');
+```

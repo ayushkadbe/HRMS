@@ -11,7 +11,7 @@ const Layout = ({ children }) => {
       {/* <!-- ===== Page Wrapper Start ===== --> */}
       <div className='flex h-screen overflow-hidden'>
         {/* <!-- ===== Sidebar Admin Start ===== --> */}
-        {user && user.hak_akses === "admin" && (
+        {user && (user.hak_akses === "admin" || user.hak_akses === "site_manager" || user.hak_akses === "site_admin") && (
           <SidebarAdmin sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
         )}
         {/* <!-- ===== Sidebar Admin End ===== --> */}

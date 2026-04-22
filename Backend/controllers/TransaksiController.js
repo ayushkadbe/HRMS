@@ -261,7 +261,10 @@ export const viewDataLemburByID = async (req, res) => {
 export const createDataLembur = async (req, res) => {
   const { pegawai_id, tanggal_lembur, jam_lembur, alasan } = req.body;
 
-  if (!pegawai_id || !tanggal_lembur || !jam_lembur || !alasan) {
+  const isJamLemburMissing =
+    jam_lembur === undefined || jam_lembur === null || String(jam_lembur).trim() === "";
+
+  if (!pegawai_id || !tanggal_lembur || isJamLemburMissing || !alasan) {
     return res.status(400).json({ msg: "Semua field wajib diisi" });
   }
 

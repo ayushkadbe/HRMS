@@ -107,3 +107,71 @@ PHASE 2.2:
 
 * Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">overtime_feature.md</span>` with Phase 2.2 rate-adjustment notes.
 * Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">DB.md</span>` to reflect formula-based overtime rate and no schema change.
+
+PHASE 3:
+
+### What I changed
+
+* Added backend role guard `adminOrSiteManager` in `<span class="md-inline-path-prefix">Backend/middleware/</span><span class="md-inline-path-filename">AuthUser.js</span>`.
+* Updated overtime routes in `<span class="md-inline-path-prefix">Backend/routes/</span><span class="md-inline-path-filename">UserRoute.js</span>`:
+  * `GET/POST data_lembur` now accessible for `admin` and `site_manager`.
+  * `approve/reject/delete data_lembur` remains `admin` only.
+* Updated layout role handling in `<span class="md-inline-path-prefix">Frontend/src/layout/</span><span class="md-inline-path-filename">index.jsx</span>` so `site_manager` uses the admin-style sidebar shell.
+* Updated sidebar visibility rules in `<span class="md-inline-path-prefix">Frontend/src/components/molecules/Sidebar/SidebarAdmin/</span><span class="md-inline-path-filename">index.jsx</span>`:
+  * Site Manager only sees `Overtime Data` under transactions.
+  * Master Data, Attendance, Deduction, Salary, and Reports remain hidden for site manager.
+* Updated overtime page guards/actions:
+  * `<span class="md-inline-path-prefix">Frontend/src/pages/Admin/Transaksi/DataLembur/</span><span class="md-inline-path-filename">index.jsx</span>` now allows `site_manager` access, but approve/reject/delete actions are only visible to admin.
+  * `<span class="md-inline-path-prefix">Frontend/src/components/molecules/Form/FormDataLembur/FormAddDataLembur/</span><span class="md-inline-path-filename">index.jsx</span>` now allows `site_manager` access.
+* Added `site_manager` option to employee access dropdowns:
+  * `<span class="md-inline-path-prefix">Frontend/src/components/molecules/Form/FormDataPegawai/FormAddDataPegawai/</span><span class="md-inline-path-filename">index.jsx</span>`
+  * `<span class="md-inline-path-prefix">Frontend/src/components/molecules/Form/FormDataPegawai/FormEditDataPegawai/</span><span class="md-inline-path-filename">index.jsx</span>`
+
+### Docs updates
+
+* Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">overtime_feature.md</span>` with Phase 3 scope and access policy.
+* Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">DB.md</span>` with role verification/update SQL for `site_manager`.
+
+PHASE 3.1:
+
+### What I changed
+
+* Updated role handling to support `site_admin` with minimal new code.
+* Backend access control updates:
+  * `<span class="md-inline-path-prefix">Backend/middleware/</span><span class="md-inline-path-filename">AuthUser.js</span>` now allows `site_admin` in `adminOrSiteManager` middleware.
+  * `<span class="md-inline-path-prefix">Backend/routes/</span><span class="md-inline-path-filename">UserRoute.js</span>` now allows `site_admin` read access to:
+    * `GET /data_pegawai`
+    * `GET /data_jabatan`
+    * `GET /data_kehadiran`
+    * existing overtime create/view routes
+* Frontend operational-role behavior:
+  * `<span class="md-inline-path-prefix">Frontend/src/components/molecules/DefaultDashboard/</span><span class="md-inline-path-filename">index.jsx</span>` shows admin-style dashboard widgets for `site_admin`.
+  * `<span class="md-inline-path-prefix">Frontend/src/components/molecules/Sidebar/SidebarAdmin/</span><span class="md-inline-path-filename">index.jsx</span>` shows Master Data + Transactions menu for `site_admin`, while payroll/reports remain hidden.
+  * `<span class="md-inline-path-prefix">Frontend/src/pages/Admin/MasterData/DataPegawai/</span><span class="md-inline-path-filename">index.jsx</span>` and `<span class="md-inline-path-prefix">DataJabatan/</span><span class="md-inline-path-filename">index.jsx</span>` allow `site_admin` view-only access (create/edit/delete hidden).
+  * `<span class="md-inline-path-prefix">Frontend/src/pages/Admin/Transaksi/DataKehadiran/</span><span class="md-inline-path-filename">index.jsx</span>` allows `site_admin` view-only access.
+  * Overtime form/list now accept `site_admin` role guards while approval actions stay admin-only.
+* Employee form role option update:
+  * Added `site_admin` option in add/edit employee forms.
+
+### Docs updates
+
+* Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">overtime_feature.md</span>` with Phase 3.1 role policy.
+* Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">DB.md</span>` with migration SQL from `site_manager` to `site_admin`.
+
+PHASE 3.2:
+
+### What I changed
+
+* Aligned `site_manager` menu/dashboard visibility with operational role expectations:
+  * Dashboard cards/charts are now visible for `site_manager`.
+  * Master Data + Transactions groups are available for `site_manager`.
+* Kept restricted actions unchanged:
+  * approve/reject/delete overtime remain admin-only.
+  * payroll/report modules remain admin-only.
+* Added targeted restriction for `site_manager`:
+  * `Position Data` menu hidden in sidebar.
+  * direct page access to `Position Data` blocked for `site_manager`.
+
+### Docs updates
+
+* Updated `<span class="md-inline-path-prefix">docs/</span><span class="md-inline-path-filename">overtime_feature.md</span>` with Phase 3.2 alignment notes.

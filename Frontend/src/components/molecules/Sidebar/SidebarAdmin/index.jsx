@@ -10,6 +10,7 @@ import { FaRegMoneyBillAlt } from 'react-icons/fa'
 import { TfiPrinter } from 'react-icons/tfi'
 import { logoutUser } from '../../../../config/redux/action'
 import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import Swal from 'sweetalert2';
 import { reset } from '../../../../config/redux/reducer/authReducer'
 
@@ -17,6 +18,13 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
   const location = useLocation()
   const { pathname } = location
   const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const userRole = user?.hak_akses;
+  const isAdmin = userRole === "admin";
+  const isSiteAdmin = userRole === "site_admin";
+  const isSiteManager = userRole === "site_manager";
+  const isSiteOps = isSiteAdmin || isSiteManager;
+  const canViewPositionData = isAdmin || isSiteAdmin;
   const navigate = useNavigate();
   const trigger = useRef(null)
   const sidebar = useRef(null)
@@ -136,7 +144,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
               {/* <!-- Dashboard Admin --> */}
 
               {/* <!-- Master Data Admin --> */}
-              <SidebarLinkGroup
+              {(isAdmin || isSiteOps) && <SidebarLinkGroup
                 activeCondition={
                   pathname === '/masterdata' || pathname.includes('masterdata')
                 }
@@ -179,24 +187,26 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                               Employee Data
                             </NavLink>
                           </li>
-                          <li>
-                            <NavLink
-                              to='/data-jabatan'
-                              className={({ isActive }) =>
-                                'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
-                                (isActive && '!text-white')
-                              }
-                            >
-                              Position Data
-                            </NavLink>
-                          </li>
+                          {canViewPositionData && (
+                            <li>
+                              <NavLink
+                                to='/data-jabatan'
+                                className={({ isActive }) =>
+                                  'group relative flex items-center gap-2.5 rounded-md px-4 font-medium text-bodydark2 duration-300 ease-in-out hover:text-white ' +
+                                  (isActive && '!text-white')
+                                }
+                              >
+                                Position Data
+                              </NavLink>
+                            </li>
+                          )}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
                     </React.Fragment>
                   )
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup>}
               {/* <!-- Master Data Admin --> */}
 
               {/* <!-- Transaksi Admin --> */}
@@ -232,7 +242,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                           }`}
                       >
                         <ul className='mt-4 mb-5.5 flex flex-col gap-2.5 pl-6'>
-                          <li>
+                          {(isAdmin || isSiteOps) && <li>
                             <NavLink
                               to='/data-kehadiran'
                               className={({ isActive }) =>
@@ -242,7 +252,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                             >
                               Attendance Data
                             </NavLink>
-                          </li>
+                          </li>}
                           <li>
                             <NavLink
                               to='/data-lembur'
@@ -254,7 +264,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                               Overtime Data
                             </NavLink>
                           </li>
-                          <li>
+                          {isAdmin && <li>
                             <NavLink
                               to='/data-potongan'
                               className={({ isActive }) =>
@@ -264,8 +274,8 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                             >
                               Deduction Data
                             </NavLink>
-                          </li>
-                          <li>
+                          </li>}
+                          {isAdmin && <li>
                             <NavLink
                               to='/data-gaji'
                               className={({ isActive }) =>
@@ -275,7 +285,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                             >
                               Salary Data
                             </NavLink>
-                          </li>
+                          </li>}
                         </ul>
                       </div>
                       {/* <!-- Dropdown Menu End --> */}
@@ -286,7 +296,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
               {/* <!-- Transaksi Admin --> */}
 
               {/* <!-- Laporan Admin --> */}
-              <SidebarLinkGroup
+              {isAdmin && <SidebarLinkGroup
                 activeCondition={
                   pathname === '/laporan' || pathname.includes('laporan')
                 }
@@ -357,7 +367,7 @@ const SidebarAdmin = ({ sidebarOpen, setSidebarOpen }) => {
                     </React.Fragment>
                   )
                 }}
-              </SidebarLinkGroup>
+              </SidebarLinkGroup>}
               {/* <!-- Laporan Admin --> */}
 
               {/* <!-- Pengaturan Admin --> */}

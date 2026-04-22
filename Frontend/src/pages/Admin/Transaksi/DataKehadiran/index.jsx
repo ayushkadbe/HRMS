@@ -20,6 +20,7 @@ const DataKehadiran = () => {
 
     const { dataKehadiran } = useSelector((state) => state.dataKehadiran);
     const { isError, user } = useSelector((state) => state.auth);
+    const isAdmin = user?.hak_akses === "admin";
 
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -103,7 +104,12 @@ const DataKehadiran = () => {
         if (isError) {
             navigate('/login');
         }
-        if (user && user.hak_akses !== 'admin') {
+        if (
+            user &&
+            user.hak_akses !== 'admin' &&
+            user.hak_akses !== 'site_admin' &&
+            user.hak_akses !== 'site_manager'
+        ) {
             navigate('/dashboard');
         }
     }, [isError, user, navigate]);
@@ -207,18 +213,20 @@ const DataKehadiran = () => {
                             </span>
                         </div>
                     </div>
-                    <div className='w-full md:w-1/2 flex justify-center md:justify-end'>
-                        <div className='w-full md:w-auto'>
-                            <Link to='/data-kehadiran/form-data-kehadiran/add'>
-                                <ButtonOne>
-                                    <span>Enter Attendance</span>
-                                    <span>
-                                        <FaPlus />
-                                    </span>
-                                </ButtonOne>
-                            </Link>
+                    {isAdmin && (
+                        <div className='w-full md:w-1/2 flex justify-center md:justify-end'>
+                            <div className='w-full md:w-auto'>
+                                <Link to='/data-kehadiran/form-data-kehadiran/add'>
+                                    <ButtonOne>
+                                        <span>Enter Attendance</span>
+                                        <span>
+                                            <FaPlus />
+                                        </span>
+                                    </ButtonOne>
+                                </Link>
+                            </div>
                         </div>
-                    </div>
+                    )}
                 </div>
                 <div className="bg-gray-2 text-left dark:bg-meta-4 mt-6">
                     {filteredDataKehadiran.slice(startIndex, endIndex).reduce((uniqueEntries, data) => {
@@ -320,18 +328,20 @@ const DataKehadiran = () => {
                                             <p className='text-center text-black dark:text-white'>{data.alpha}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 dark:border-strokedark'>
-                                            <div className='flex items-center space-x-3.5'>
-                                                <Link className='hover:text-black'
-                                                    to={`/data-kehadiran/form-data-kehadiran/edit/${data.id}`}
-                                                >
-                                                    <FaRegEdit className="text-primary text-xl hover:text-black dark:hover:text-white" />
-                                                </Link>
-                                                <button className='hover:text-black'
-                                                    onClick={() => onDeleteDataKehadiran(data.id)}
-                                                >
-                                                    <BsTrash3 className="text-danger text-xl hover:text-black dark:hover:text-white" />
-                                                </button>
-                                            </div>
+                                            {isAdmin && (
+                                                <div className='flex items-center space-x-3.5'>
+                                                    <Link className='hover:text-black'
+                                                        to={`/data-kehadiran/form-data-kehadiran/edit/${data.id}`}
+                                                    >
+                                                        <FaRegEdit className="text-primary text-xl hover:text-black dark:hover:text-white" />
+                                                    </Link>
+                                                    <button className='hover:text-black'
+                                                        onClick={() => onDeleteDataKehadiran(data.id)}
+                                                    >
+                                                        <BsTrash3 className="text-danger text-xl hover:text-black dark:hover:text-white" />
+                                                    </button>
+                                                </div>
+                                            )}
                                         </td>
                                     </tr>
                                 );

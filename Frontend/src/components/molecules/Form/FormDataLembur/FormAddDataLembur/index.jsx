@@ -114,7 +114,12 @@ const FormAddDataLembur = () => {
     if (isError) {
       navigate("/login");
     }
-    if (user && user.hak_akses !== "admin") {
+    if (
+      user &&
+      user.hak_akses !== "admin" &&
+      user.hak_akses !== "site_manager" &&
+      user.hak_akses !== "site_admin"
+    ) {
       navigate("/dashboard");
     }
   }, [isError, user, navigate]);

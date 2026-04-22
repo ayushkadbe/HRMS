@@ -15,6 +15,7 @@ const DataLembur = () => {
   const [filterNama, setFilterNama] = useState("");
   const [filterStatus, setFilterStatus] = useState("");
   const { isError, user } = useSelector((state) => state.auth);
+  const isAdmin = user?.hak_akses === "admin";
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -108,7 +109,12 @@ const DataLembur = () => {
     if (isError) {
       navigate("/login");
     }
-    if (user && user.hak_akses !== "admin") {
+    if (
+      user &&
+      user.hak_akses !== "admin" &&
+      user.hak_akses !== "site_manager" &&
+      user.hak_akses !== "site_admin"
+    ) {
       navigate("/dashboard");
     }
   }, [isError, user, navigate]);
@@ -183,7 +189,7 @@ const DataLembur = () => {
                   <td className="py-4 px-4 text-black dark:text-white capitalize">{item.status}</td>
                   <td className="py-4 px-4">
                     <div className="flex items-center gap-3">
-                      {item.status === "pending" && (
+                      {isAdmin && item.status === "pending" && (
                         <>
                           <button onClick={() => handleApprove(item.id)} title="Approve">
                             <BiCheck className="text-xl text-success hover:text-black dark:hover:text-white" />
@@ -193,9 +199,11 @@ const DataLembur = () => {
                           </button>
                         </>
                       )}
-                      <button onClick={() => handleDelete(item.id)} title="Delete">
-                        <BsTrash3 className="text-xl text-danger hover:text-black dark:hover:text-white" />
-                      </button>
+                      {isAdmin && (
+                        <button onClick={() => handleDelete(item.id)} title="Delete">
+                          <BsTrash3 className="text-xl text-danger hover:text-black dark:hover:text-white" />
+                        </button>
+                      )}
                     </div>
                   </td>
                 </tr>

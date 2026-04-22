@@ -30,3 +30,37 @@ PHASE 2.2 (RATE ADJUSTMENT):
 - Current backend policy constant:
   - `overtime_multiplier = 1` (can be changed later for legal/company policy).
 - Effective calculation now aligns overtime amount with each employee's own `gaji_pokok`.
+
+PHASE 3 (SITE MANAGER ROLE SPLIT):
+- Added `site_manager` as a dedicated app access role (`hak_akses`) for overtime operations.
+- Site Manager can:
+  - View overtime list
+  - Create overtime entries
+- Site Manager cannot:
+  - Approve/reject overtime
+  - Access payroll/salary update screens
+  - Access admin master/report modules
+- Admin remains the only role allowed to approve/reject overtime and manage payroll calculations.
+
+PHASE 3.1 (SITE ADMIN ROLE UPDATE - MINIMAL CHANGES):
+- Introduced `site_admin` as operational role in `hak_akses` dropdown.
+- `site_admin` can access:
+  - Dashboard (admin-style summary cards/charts)
+  - Master Data pages (view-only)
+  - Transaction pages for Attendance (view-only) and Overtime (create/view)
+- `site_admin` cannot:
+  - Create/update/delete master data records
+  - Approve/reject/delete overtime requests
+  - Access payroll and reports modules
+- Overtime approval and payroll impact remain admin-only.
+
+PHASE 3.2 (SITE MANAGER MENU ALIGNMENT):
+- `site_manager` now shares the same operational shell access as `site_admin`:
+  - Dashboard with admin-style cards/charts
+  - Master Data and Transactions groups visible in sidebar
+- `site_manager` still remains restricted from approval/payroll controls:
+  - cannot approve/reject/delete overtime
+  - payroll and reports remain admin-only
+- Additional UI rule:
+  - `Position Data` tab is hidden for `site_manager`
+  - direct access to `Position Data` page is blocked for `site_manager`

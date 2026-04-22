@@ -19,6 +19,7 @@ const DataPegawai = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isError, user } = useSelector((state) => state.auth);
+    const isAdmin = user?.hak_akses === "admin";
     const { dataPegawai } = useSelector((state) => state.dataPegawai);
 
     const totalPages = Math.ceil(dataPegawai.length / ITEMS_PER_PAGE);
@@ -94,7 +95,12 @@ const DataPegawai = () => {
         if (isError) {
             navigate('/login');
         }
-        if (user && user.hak_akses !== 'admin') {
+        if (
+            user &&
+            user.hak_akses !== 'admin' &&
+            user.hak_akses !== 'site_admin' &&
+            user.hak_akses !== 'site_manager'
+        ) {
             navigate('/dashboard');
         }
     }, [isError, user, navigate]);
@@ -147,14 +153,16 @@ const DataPegawai = () => {
     return (
         <Layout>
             <Breadcrumb pageName="Employee Data" />
-            <Link to="/data-pegawai/form-data-pegawai/add">
-                <ButtonOne>
-                    <span>Add Employee</span>
-                    <span>
-                        <FaPlus />
-                    </span>
-                </ButtonOne>
-            </Link>
+            {isAdmin && (
+                <Link to="/data-pegawai/form-data-pegawai/add">
+                    <ButtonOne>
+                        <span>Add Employee</span>
+                        <span>
+                            <FaPlus />
+                        </span>
+                    </ButtonOne>
+                </Link>
+            )}
             <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mt-6">
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
                     <div className="relative flex-1 md:mr-2 mb-4 md:mb-0">
@@ -235,18 +243,20 @@ const DataPegawai = () => {
                                             <p className="text-black dark:text-white">{data.hak_akses}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <div className="flex items-center space-x-3.5">
-                                                <Link
-                                                    to={`/data-pegawai/form-data-pegawai/edit/${data.id}`}
-                                                    className="hover:text-black">
-                                                    <FaRegEdit className="text-primary text-xl hover:text-black dark:hover:text-white" />
-                                                </Link>
-                                                <button
-                                                    onClick={() => onDeletePegawai(data.id)}
-                                                    className="hover:text-black">
-                                                    <BsTrash3 className="text-danger text-xl hover:text-black dark:hover:text-white" />
-                                                </button>
-                                            </div>
+                                            {isAdmin && (
+                                                <div className="flex items-center space-x-3.5">
+                                                    <Link
+                                                        to={`/data-pegawai/form-data-pegawai/edit/${data.id}`}
+                                                        className="hover:text-black">
+                                                        <FaRegEdit className="text-primary text-xl hover:text-black dark:hover:text-white" />
+                                                    </Link>
+                                                    <button
+                                                        onClick={() => onDeletePegawai(data.id)}
+                                                        className="hover:text-black">
+                                                        <BsTrash3 className="text-danger text-xl hover:text-black dark:hover:text-white" />
+                                                    </button>
+                                                </div>
+                                            )}
                                         </td>
                                     </tr>
                                 );

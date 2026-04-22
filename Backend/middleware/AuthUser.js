@@ -35,3 +35,25 @@ export const adminOnly = async (req, res, next) => {
         return res.status(500).json({ msg: "Terjadi Kesalahan Pada Server" });
     }
 }
+
+export const adminOrSiteManager = async (req, res, next) => {
+    try {
+        const pegawai = await DataPegawai.findOne({
+            where: {
+                id_pegawai: req.session.userId
+            }
+        });
+        if (!pegawai) return res.status(404).json({ msg: "Data Pegawai Tidak di Temukan" });
+        if (
+            pegawai.hak_akses !== "admin" &&
+            pegawai.hak_akses !== "site_manager" &&
+            pegawai.hak_akses !== "site_admin"
+        ) {
+            return res.status(403).json({ msg: "Akses terlarang" });
+        }
+        next();
+    } catch (err) {
+        console.error(err);
+        return res.status(500).json({ msg: "Terjadi Kesalahan Pada Server" });
+    }
+}

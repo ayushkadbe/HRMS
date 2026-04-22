@@ -324,6 +324,7 @@ const FormAddDataPegawai = () => {
                                             >
                                                 <option value='' disabled={true}>Pilih hak akses</option>
                                                 <option value='admin'>Admin</option>
+                                                <option value='site_admin'>Site Admin</option>
                                                 <option value='pegawai'>Pegawai</option>
                                             </select>
                                             <span className='absolute top-1/2 right-4 z-30 -translate-y-1/2 text-2xl'>
