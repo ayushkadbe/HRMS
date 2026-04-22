@@ -18,8 +18,24 @@ const FormEditDataPotongan = () => {
 
     const { isError, user } = useSelector((state) => state.auth);
 
+    const validatePositiveAmount = () => {
+        if (Number(jmlPotongan) <= 0 || Number.isNaN(Number(jmlPotongan))) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: 'Jumlah Potongan harus berupa angka positif'
+            });
+            return false;
+        }
+
+        return true;
+    };
+
     const updateDataPotongan = async (e) => {
         e.preventDefault();
+        if (!validatePositiveAmount()) {
+            return;
+        }
         try {
             const formData = new FormData();
             formData.append('potongan', potongan);
@@ -118,6 +134,8 @@ const FormEditDataPotongan = () => {
                                             name='jmlPotongan'
                                             value={jmlPotongan}
                                             onChange={(e) => setJmlPotongan(e.target.value)}
+                                            min='1'
+                                            step='1'
                                             required
                                             placeholder='Masukkan jumlah potongan'
                                             className='w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'

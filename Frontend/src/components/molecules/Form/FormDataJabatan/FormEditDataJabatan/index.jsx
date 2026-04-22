@@ -20,6 +20,26 @@ const FormEditDataJabatan = () => {
     
     const { isError, user } = useSelector((state) => state.auth);
 
+    const validatePositiveAmounts = () => {
+        const amountFields = [
+            { label: 'Gaji Pokok', value: gajiPokok },
+            { label: 'Tunjangan Transport', value: tjTransport },
+            { label: 'Uang Makan', value: uangMakan },
+        ];
+
+        const invalidField = amountFields.find(({ value }) => Number(value) <= 0 || Number.isNaN(Number(value)));
+        if (invalidField) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal',
+                text: `${invalidField.label} harus berupa angka positif`,
+            });
+            return false;
+        }
+
+        return true;
+    };
+
     useEffect(() => {
         const getUserById = async () => {
             try {
@@ -39,6 +59,9 @@ const FormEditDataJabatan = () => {
 
     const updateDataJabatan = async (e) => {
         e.preventDefault();
+        if (!validatePositiveAmounts()) {
+            return;
+        }
         try {
             const formData = new FormData();
             formData.append('nama_jabatan', namaJabatan);
@@ -122,6 +145,8 @@ const FormEditDataJabatan = () => {
                                             name='gajiPokok'
                                             value={gajiPokok}
                                             onChange={(e) => setGajiPokok(e.target.value)}
+                                            min='1'
+                                            step='1'
                                             required
                                             placeholder='Masukkan gaji pokok'
                                             className='w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
@@ -140,6 +165,8 @@ const FormEditDataJabatan = () => {
                                             name='tjTransport'
                                             value={tjTransport}
                                             onChange={(e) => setTjTransport(e.target.value)}
+                                            min='1'
+                                            step='1'
                                             required
                                             placeholder='Masukkan tunjangan transport'
                                             className='w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
@@ -156,6 +183,8 @@ const FormEditDataJabatan = () => {
                                             name='uangMakan'
                                             value={uangMakan}
                                             onChange={(e) => setUangMakan(e.target.value)}
+                                            min='1'
+                                            step='1'
                                             required
                                             placeholder='Masukkan uang makan'
                                             className='w-full rounded border-[1.5px] border-stroke bg-transparent py-3 px-5 font-medium outline-none transition focus:border-primary active:border-primary disabled:cursor-default disabled:bg-whiter dark:border-form-strokedark dark:bg-form-input dark:focus:border-primary'
