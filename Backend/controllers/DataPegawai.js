@@ -1,6 +1,7 @@
 import DataPegawai from "../models/DataPegawaiModel.js";
 import argon2 from "argon2";
 import path from "path";
+import fs from "fs";
 
 // menampilkan semua data Pegawai
 export const getDataPegawai = async (req, res) => {
@@ -108,7 +109,7 @@ export const createDataPegawai = async (req, res) => {
     const file = req.files.photo;
     const fileSize = file.data.length;
     const ext = path.extname(file.name);
-    const fileName = file.md5 + ext;
+    const fileName = `${file.md5}-${Date.now()}${ext}`;
     const url = `${req.protocol}://${req.get("host")}/images/${fileName}`;
     const allowedTypes = ['.png', '.jpg', '.jpeg'];
 
@@ -120,7 +121,14 @@ export const createDataPegawai = async (req, res) => {
         return res.status(422).json({ msg: "Ukuran Gambar Harus Kurang Dari 2 MB" });
     }
 
-    file.mv(`./public/images/${fileName}`, async (err) => {
+    const uploadDir = path.resolve("Backend/public/images");
+    if (!fs.existsSync(uploadDir)) {
+        fs.mkdirSync(uploadDir, { recursive: true });
+    }
+
+    const destination = path.join(uploadDir, fileName);
+
+    file.mv(destination, async (err) => {
         if (err) {
             return res.status(500).json({ msg: err.message });
         }
