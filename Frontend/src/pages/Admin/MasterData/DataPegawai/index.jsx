@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { deleteDataPegawai, getDataPegawai, getMe } from '../../../../config/redux/action';
 import { BiSearch } from 'react-icons/bi';
 import { MdKeyboardDoubleArrowLeft, MdKeyboardDoubleArrowRight, MdOutlineKeyboardArrowDown } from 'react-icons/md';
+import axios from 'axios';
 
 const ITEMS_PER_PAGE = 4;
 
@@ -16,6 +17,7 @@ const DataPegawai = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [filterStatus, setFilterStatus] = useState('');
+    const [isDownloadingCsv, setIsDownloadingCsv] = useState(false);
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { isError, user } = useSelector((state) => state.auth);
@@ -55,6 +57,76 @@ const DataPegawai = () => {
 
     const handleFilterStatus = (event) => {
         setFilterStatus(event.target.value);
+    };
+
+    const csvEscape = (value) => {
+        if (value === null || value === undefined) return '';
+        const str = String(value);
+        if (/[",\r\n]/.test(str)) return `"${str.replace(/"/g, '""')}"`;
+        return str;
+    };
+
+    const onDownloadCsv = async () => {
+        if (isDownloadingCsv) return;
+        setIsDownloadingCsv(true);
+
+        try {
+            let jabatanByName = new Map();
+
+            try {
+                const jabatanResponse = await axios.get("http://localhost:5000/data_jabatan");
+                const jabatanRows = Array.isArray(jabatanResponse.data) ? jabatanResponse.data : [];
+                jabatanByName = new Map(
+                    jabatanRows
+                        .filter((j) => j && typeof j.nama_jabatan === "string")
+                        .map((j) => [j.nama_jabatan, j])
+                );
+            } catch (err) {
+                // If the user doesn't have access or the endpoint errors, export without salary values.
+                console.warn("CSV export: failed to load data_jabatan:", err);
+            }
+
+            const header = ["Name", "Designation", "Department", "Salary"];
+            const lines = [
+                header.map(csvEscape).join(","),
+                ...filteredDataPegawai.map((p) => {
+                    const department = p?.jabatan || "";
+                    const jabatan = jabatanByName.get(department);
+                    const salary = jabatan?.gaji_pokok ?? "";
+
+                    return [
+                        p?.nama_pegawai || "",
+                        p?.designation || "",
+                        department,
+                        salary,
+                    ].map(csvEscape).join(",");
+                }),
+            ];
+
+            // UTF-8 BOM helps Excel open UTF-8 CSV correctly.
+            const csv = "\ufeff" + lines.join("\r\n");
+            const blob = new Blob([csv], { type: "text/csv;charset=utf-8" });
+
+            const datePart = new Date().toISOString().slice(0, 10);
+            const fileName = `employee-list-${datePart}.csv`;
+
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = fileName;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            URL.revokeObjectURL(url);
+        } catch (error) {
+            Swal.fire({
+                icon: "error",
+                title: "Failed",
+                text: "Failed to download CSV. Please try again.",
+            });
+        } finally {
+            setIsDownloadingCsv(false);
+        }
     };
 
     const onDeletePegawai = (id) => {
@@ -153,16 +225,27 @@ const DataPegawai = () => {
     return (
         <Layout>
             <Breadcrumb pageName="Employee Data" />
-            {isAdmin && (
-                <Link to="/data-pegawai/form-data-pegawai/add">
-                    <ButtonOne>
-                        <span>Add Employee</span>
-                        <span>
-                            <FaPlus />
-                        </span>
-                    </ButtonOne>
-                </Link>
-            )}
+            <div className="flex flex-col sm:flex-row gap-3 items-start">
+                <button
+                    type="button"
+                    onClick={onDownloadCsv}
+                    disabled={isDownloadingCsv}
+                    className="inline-flex items-center justify-center rounded-md bg-primary py-3 px-6 text-center font-medium text-white hover:bg-opacity-90 disabled:opacity-60"
+                >
+                    {isDownloadingCsv ? "Preparing..." : "Download CSV"}
+                </button>
+
+                {isAdmin && (
+                    <Link to="/data-pegawai/form-data-pegawai/add">
+                        <ButtonOne>
+                            <span>Add Employee</span>
+                            <span>
+                                <FaPlus />
+                            </span>
+                        </ButtonOne>
+                    </Link>
+                )}
+            </div>
             <div className="rounded-sm border border-stroke bg-white px-5 pt-6 pb-2.5 shadow-default dark:border-strokedark dark:bg-boxdark sm:px-7.5 xl:pb-1 mt-6">
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">
                     <div className="relative flex-1 md:mr-2 mb-4 md:mb-0">
