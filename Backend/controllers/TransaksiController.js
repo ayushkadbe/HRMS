@@ -124,15 +124,15 @@ export const createDataKehadiran = async (req, res) => {
     });
 
     if (!data_nama_pegawai) {
-      return res.status(404).json({ msg: "Data nama pegawai tidak ditemukan" });
+      return res.status(404).json({ msg: "Employee name data not found" });
     }
 
     if (!data_nama_jabatan) {
-      return res.status(404).json({ msg: "Data nama jabatan tidak ditemukan" });
+      return res.status(404).json({ msg: "Position data not found" });
     }
 
     if (!data_nik_pegawai) {
-      return res.status(404).json({ msg: "Data nik tidak ditemukan" });
+      return res.status(404).json({ msg: "NIK data not found" });
     }
 
     if (!nama_sudah_ada) {
@@ -147,9 +147,9 @@ export const createDataKehadiran = async (req, res) => {
         sakit: sakit,
         alpha: alpha,
       });
-      res.json({ msg: "Tambah Data Kehadiran Berhasil" });
+      res.json({ msg: "Attendance record created successfully" });
     } else {
-      res.status(400).json({ msg: "Data nama sudah ada" });
+      res.status(400).json({ msg: "Attendance record for that employee already exists" });
     }
   } catch (error) {
     console.log(error);
@@ -164,7 +164,7 @@ export const updateDataKehadiran = async (req, res) => {
         id: req.params.id,
       },
     });
-    res.status(200).json({ msg: "Data kehadiran berhasil diupdate" });
+    res.status(200).json({ msg: "Attendance record updated successfully" });
   } catch (error) {
     console.log(error.msg);
   }
@@ -178,7 +178,7 @@ export const deleteDataKehadiran = async (req, res) => {
         id: req.params.id,
       },
     });
-    res.status(200).json({ msg: "Delete data berhasil" });
+    res.status(200).json({ msg: "Attendance record deleted successfully" });
   } catch (error) {
     console.log(error.msg);
   }
@@ -195,15 +195,15 @@ const validateTanggalLembur = (tanggalLembur) => {
   parsedDate.setHours(0, 0, 0, 0);
 
   if (Number.isNaN(parsedDate.getTime())) {
-    return "Tanggal lembur tidak valid";
+    return "Overtime date is invalid";
   }
 
   if (parsedDate > today) {
-    return "Tanggal lembur tidak boleh di masa depan";
+    return "Overtime date cannot be in the future";
   }
 
   if (parsedDate < minDate) {
-    return "Tanggal lembur tidak boleh lebih dari 7 hari ke belakang";
+    return "Overtime date cannot be more than 7 days in the past";
   }
 
   return null;
@@ -265,17 +265,17 @@ export const createDataLembur = async (req, res) => {
     jam_lembur === undefined || jam_lembur === null || String(jam_lembur).trim() === "";
 
   if (!pegawai_id || !tanggal_lembur || isJamLemburMissing || !alasan) {
-    return res.status(400).json({ msg: "Semua field wajib diisi" });
+    return res.status(400).json({ msg: "All fields are required" });
   }
 
   const jamLemburNum = Number(jam_lembur);
   if (!Number.isInteger(jamLemburNum) || jamLemburNum < 1 || jamLemburNum > 6) {
-    return res.status(400).json({ msg: "Jam lembur harus antara 1 sampai 6 jam" });
+    return res.status(400).json({ msg: "Overtime hours must be between 1 and 6" });
   }
 
   const alasanTrimmed = String(alasan).trim();
   if (alasanTrimmed.length < 10) {
-    return res.status(400).json({ msg: "Alasan lembur minimal 10 karakter" });
+    return res.status(400).json({ msg: "Overtime reason must be at least 10 characters" });
   }
 
   const tanggalValidation = validateTanggalLembur(tanggal_lembur);
@@ -291,7 +291,7 @@ export const createDataLembur = async (req, res) => {
     });
 
     if (!pegawai) {
-      return res.status(404).json({ msg: "Data pegawai tidak ditemukan" });
+      return res.status(404).json({ msg: "Employee record not found" });
     }
 
     const duplicateEntry = await DataLembur.findOne({
@@ -304,7 +304,7 @@ export const createDataLembur = async (req, res) => {
     if (duplicateEntry) {
       return res
         .status(400)
-        .json({ msg: "Data lembur untuk pegawai dan tanggal ini sudah ada" });
+        .json({ msg: "An overtime record for this employee and date already exists" });
     }
 
     const { startIso, endIso } = getBulanBoundary(tanggal_lembur);
@@ -327,7 +327,7 @@ export const createDataLembur = async (req, res) => {
     if (totalMonthly + jamLemburNum > 60) {
       return res
         .status(400)
-        .json({ msg: "Total lembur bulanan melebihi batas 60 jam" });
+        .json({ msg: "Monthly overtime exceeds the 60-hour limit" });
     }
 
     await DataLembur.create({
@@ -340,7 +340,7 @@ export const createDataLembur = async (req, res) => {
       status: "pending",
     });
 
-    res.status(201).json({ msg: "Data lembur berhasil disimpan" });
+    res.status(201).json({ msg: "Overtime record saved successfully" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -356,11 +356,11 @@ export const approveDataLembur = async (req, res) => {
     });
 
     if (!dataLembur) {
-      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+      return res.status(404).json({ msg: "Overtime record not found" });
     }
 
     if (dataLembur.status !== "pending") {
-      return res.status(400).json({ msg: "Hanya data pending yang dapat di-approve" });
+      return res.status(400).json({ msg: "Only pending records can be approved" });
     }
 
     await DataLembur.update(
@@ -376,7 +376,7 @@ export const approveDataLembur = async (req, res) => {
       }
     );
 
-    res.status(200).json({ msg: "Data lembur berhasil di-approve" });
+    res.status(200).json({ msg: "Overtime record approved successfully" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -392,11 +392,11 @@ export const rejectDataLembur = async (req, res) => {
     });
 
     if (!dataLembur) {
-      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+      return res.status(404).json({ msg: "Overtime record not found" });
     }
 
     if (dataLembur.status !== "pending") {
-      return res.status(400).json({ msg: "Hanya data pending yang dapat di-reject" });
+      return res.status(400).json({ msg: "Only pending records can be rejected" });
     }
 
     await DataLembur.update(
@@ -412,7 +412,7 @@ export const rejectDataLembur = async (req, res) => {
       }
     );
 
-    res.status(200).json({ msg: "Data lembur berhasil di-reject" });
+    res.status(200).json({ msg: "Overtime record rejected successfully" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -428,7 +428,7 @@ export const deleteDataLembur = async (req, res) => {
     });
 
     if (!dataLembur) {
-      return res.status(404).json({ msg: "Data lembur tidak ditemukan" });
+      return res.status(404).json({ msg: "Overtime record not found" });
     }
 
     await DataLembur.destroy({
@@ -437,7 +437,7 @@ export const deleteDataLembur = async (req, res) => {
       },
     });
 
-    res.status(200).json({ msg: "Data lembur berhasil dihapus" });
+    res.status(200).json({ msg: "Overtime record deleted successfully" });
   } catch (error) {
     res.status(500).json({ msg: error.message });
   }
@@ -449,7 +449,7 @@ export const createDataPotonganGaji = async (req, res) => {
   try {
     const potonganValue = Number(jml_potongan);
     if (!Number.isFinite(potonganValue) || potonganValue <= 0) {
-      return res.status(400).json({ msg: "Jumlah potongan harus berupa angka positif" });
+      return res.status(400).json({ msg: "Deduction amount must be a positive number" });
     }
 
     const nama_potongan = await PotonganGaji.findOne({
@@ -458,14 +458,14 @@ export const createDataPotonganGaji = async (req, res) => {
       },
     });
     if (nama_potongan) {
-      res.status(400).json({ msg: "Data potongan sudah ada !" });
+      res.status(400).json({ msg: "Deduction record already exists" });
     } else {
       await PotonganGaji.create({
         id: id,
         potongan: potongan,
         jml_potongan: potonganValue,
       });
-      res.json({ msg: "Tambah Data Potongan Gaji Berhasil" });
+      res.json({ msg: "Salary deduction created successfully" });
     }
   } catch (error) {
     console.log(error);
@@ -504,7 +504,7 @@ export const updateDataPotongan = async (req, res) => {
   try {
     const potonganValue = Number(req.body.jml_potongan);
     if (!Number.isFinite(potonganValue) || potonganValue <= 0) {
-      return res.status(400).json({ msg: "Jumlah potongan harus berupa angka positif" });
+      return res.status(400).json({ msg: "Deduction amount must be a positive number" });
     }
 
     await PotonganGaji.update({
@@ -516,7 +516,7 @@ export const updateDataPotongan = async (req, res) => {
       },
       validate: true,
     });
-    res.status(200).json({ message: "Data Potongan berhasil diupdate" });
+    res.status(200).json({ message: "Salary deduction updated successfully" });
   } catch (error) {
     console.log(error.message);
   }
@@ -530,7 +530,7 @@ export const deleteDataPotongan = async (req, res) => {
         id: req.params.id,
       },
     });
-    res.status(200).json({ message: "Delete data berhasil" });
+    res.status(200).json({ message: "Salary deduction deleted successfully" });
   } catch (error) {
     console.log(error.message);
   }
@@ -860,7 +860,7 @@ export const viewDataGajiPegawaiByName = async (req, res) => {
       });
 
     if (dataGajiByName.length === 0) {
-      return res.status(404).json({ msg: 'Data tidak ditemukan' });
+      return res.status(404).json({ msg: 'Data not found' });
     }
     return res.json(dataGajiByName);
   } catch (error) {
@@ -952,7 +952,7 @@ export const viewDataGajiPegawaiByMonth = async (req, res) => {
 
     res
       .status(404)
-      .json({ msg: `Data untuk bulan ${req.params.month} tidak ditemukan` });
+      .json({ msg: `No salary data was found for month ${req.params.month}` });
   } catch (error) {
     res.status(500).json({ error: "Internal Server Error" });
   }
@@ -993,7 +993,7 @@ export const viewDataGajiPegawaiByYear = async (req, res) => {
     if (dataGajiByYear.length === 0) {
       return res
         .status(404)
-        .json({ msg: `Data tahun ${year} tidak ditemukan` });
+        .json({ msg: `No salary data was found for year ${year}` });
     }
     res.json(dataGajiByYear);
   } catch (error) {
@@ -1033,7 +1033,7 @@ export const dataLaporanGajiByYear = async (req, res) => {
     if (dataGajiByYear.length === 0) {
       return res
         .status(404)
-        .json({ msg: `Data tahun ${year} tidak ditemukan` });
+        .json({ msg: `No salary data was found for year ${year}` });
     } else {
       const laporanByYear = dataGajiByYear.map((data) => data.tahun)
       console.log(laporanByYear)

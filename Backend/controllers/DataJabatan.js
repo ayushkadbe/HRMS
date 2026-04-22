@@ -4,9 +4,9 @@ import { Op } from "sequelize";
 
 const validatePositiveAmountFields = (payload) => {
     const amountFields = [
-        { key: "gaji_pokok", label: "Gaji pokok" },
-        { key: "tj_transport", label: "Tunjangan transport" },
-        { key: "uang_makan", label: "Uang makan" }
+        { key: "gaji_pokok", label: "Base salary" },
+        { key: "tj_transport", label: "Transport allowance" },
+        { key: "uang_makan", label: "Meal allowance" }
     ];
 
     for (const field of amountFields) {
@@ -14,7 +14,7 @@ const validatePositiveAmountFields = (payload) => {
         const value = Number(rawValue);
 
         if (!Number.isFinite(value) || value <= 0) {
-            return `${field.label} harus berupa angka positif`;
+            return `${field.label} must be a positive number`;
         }
     }
 
@@ -34,7 +34,7 @@ export const getDataJabatan = async (req, res) => {
                 }]
             });
         } else {
-            if (req.userId !== DataJabatan.userId) return res.status(403).json({ msg: "Akses terlarang" });
+            if (req.userId !== DataJabatan.userId) return res.status(403).json({ msg: "Access denied" });
             await DataJabatan.update({
                 nama_jabatan, gaji_pokok, tj_transport, uang_makan
             }, {
@@ -63,7 +63,7 @@ export const getDataJabatanByID = async (req, res) => {
         if(response){
             res.status(200).json(response);
         }else{
-            res.status(404).json({msg: 'Data jabatan dengan ID tersebut tidak ditemukan'});
+            res.status(404).json({msg: 'Position record with that ID was not found'});
         }
     } catch (error) {
         res.status(500).json({msg: error.message});
@@ -91,7 +91,7 @@ export const createDataJabatan = async (req, res) => {
                 userId: req.userId
             });
         } else {
-            if (req.userId !== DataJabatan.userId) return res.status(403).json({ msg: "Akses terlarang" });
+            if (req.userId !== DataJabatan.userId) return res.status(403).json({ msg: "Access denied" });
             await DataJabatan.update({
                 nama_jabatan, gaji_pokok, tj_transport, uang_makan
             }, {
@@ -100,7 +100,7 @@ export const createDataJabatan = async (req, res) => {
                 },
             });
         }
-        res.status(201).json({ success: true, message: "Data Jabatan Berhasil di Simpan" });
+        res.status(201).json({ success: true, message: "Position data saved successfully" });
     } catch (error) {
         console.log(error.message);
         res.status(500).json({ success: false, message: error.message });
@@ -116,7 +116,7 @@ export const updateDataJabatan = async (req, res) => {
                 id: req.params.id
             }
         });
-        if (!jabatan) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        if (!jabatan) return res.status(404).json({ msg: "Position data not found" });
         const { nama_jabatan, gaji_pokok, tj_transport, uang_makan } = req.body;
         const validationMessage = validatePositiveAmountFields(req.body);
         if (validationMessage) {
@@ -136,7 +136,7 @@ export const updateDataJabatan = async (req, res) => {
                 validate: true
             });
         } else {
-            if (req.userId !== DataJabatan.userId) return res.status(403).json({ msg: "Akses terlarang" });
+            if (req.userId !== DataJabatan.userId) return res.status(403).json({ msg: "Access denied" });
             await DataJabatan.update({
                 nama_jabatan,
                 gaji_pokok: Number(gaji_pokok),
@@ -149,7 +149,7 @@ export const updateDataJabatan = async (req, res) => {
                 validate: true
             });
         }
-        res.status(200).json({ msg: "Data Jabatan Berhasil di Pebarui" });
+        res.status(200).json({ msg: "Position data updated successfully" });
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }
@@ -163,7 +163,7 @@ export const deleteDataJabatan = async (req, res) => {
                 id: req.params.id
             }
         });
-        if (!jabatan) return res.status(404).json({ msg: "Data tidak ditemukan" });
+        if (!jabatan) return res.status(404).json({ msg: "Position data not found" });
         if (req.hak_akses === "admin") {
             await jabatan.destroy({
                 where: {
@@ -171,14 +171,14 @@ export const deleteDataJabatan = async (req, res) => {
                 }
             });
         } else {
-            if (req.userId !== jabatan.userId) return res.status(403).json({ msg: "Akses terlarang" });
+            if (req.userId !== jabatan.userId) return res.status(403).json({ msg: "Access denied" });
             await jabatan.destroy({
                 where: {
                     [Op.and]: [{ id_jabatan: jabatan.id_jabatan }, { userId: req.userId }]
                 },
             });
         }
-        res.status(200).json({ msg: "Data Jabatan Berhasil di Hapus" });
+        res.status(200).json({ msg: "Position data deleted successfully" });
     } catch (error) {
         res.status(500).json({ msg: error.message });
     }

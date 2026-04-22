@@ -13,6 +13,8 @@ import axios from 'axios';
 
 const ITEMS_PER_PAGE = 4;
 
+const normalizeValue = (value) => (typeof value === 'string' ? value.trim().toLowerCase() : '');
+
 const DataPegawai = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -87,7 +89,7 @@ const DataPegawai = () => {
                 console.warn("CSV export: failed to load data_jabatan:", err);
             }
 
-            const header = ["Name", "Designation", "Department", "Salary"];
+            const header = ["Employee Name", "Position", "Salary"];
             const lines = [
                 header.map(csvEscape).join(","),
                 ...filteredDataPegawai.map((p) => {
@@ -97,7 +99,6 @@ const DataPegawai = () => {
 
                     return [
                         p?.nama_pegawai || "",
-                        p?.designation || "",
                         department,
                         salary,
                     ].map(csvEscape).join(",");
@@ -132,19 +133,19 @@ const DataPegawai = () => {
 
     const onDeletePegawai = (id) => {
         Swal.fire({
-            title: 'Konfirmasi',
-            text: 'Apakah Anda yakin ingin Menghapus?',
+            title: 'Confirmation',
+            text: 'Are you sure you want to delete this employee?',
             icon: 'question',
             showCancelButton: true,
-            confirmButtonText: 'Ya',
-            cancelButtonText: 'Tidak',
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No',
             reverseButtons: true,
         }).then((result) => {
             if (result.isConfirmed) {
                 dispatch(deleteDataPegawai(id)).then(() => {
                     Swal.fire({
-                        title: 'Berhasil',
-                        text: 'Data pegawai berhasil dihapus.',
+                        title: 'Success',
+                        text: 'Employee record deleted successfully.',
                         icon: 'success',
                         timer: 1000,
                         timerProgressBar: true,
@@ -314,7 +315,7 @@ const DataPegawai = () => {
                                 <th className="py-4 px-4 font-medium text-black dark:text-white xl:pl-11">NIK</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Employee Name</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Gender</th>
-                                <th className="py-4 px-4 font-medium text-black dark:text-white">Designation</th>
+                                <th className="py-4 px-4 font-medium text-black dark:text-white">Position</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Join Date</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Status</th>
                                 <th className="py-4 px-4 font-medium text-black dark:text-white">Access Role</th>
@@ -323,6 +324,10 @@ const DataPegawai = () => {
                         </thead>
                         <tbody>
                             {filteredDataPegawai.slice(startIndex, endIndex).map((data, index) => {
+                                const genderValue = normalizeValue(data.jenis_kelamin);
+                                const statusValue = normalizeValue(data.status);
+                                const accessRoleValue = normalizeValue(data.hak_akses);
+
                                 return (
                                     <tr key={data.id}>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
@@ -342,19 +347,19 @@ const DataPegawai = () => {
                                             <p className="whitespace-nowrap text-black dark:text-white">{data.nama_pegawai}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.jenis_kelamin}</p>
+                                            <p className="text-black dark:text-white">{genderValue === 'laki-laki' ? 'Male' : genderValue === 'perempuan' ? 'Female' : (data.jenis_kelamin || '-')}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="text-black dark:text-white">{data.designation || "-"}</p>
+                                            <p className="text-black dark:text-white">{data.jabatan || "-"}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                             <p className="whitespace-nowrap text-black dark:text-white">{data.tanggal_masuk}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="whitespace-nowrap text-black dark:text-white">{data.status}</p>
+                                            <p className="whitespace-nowrap text-black dark:text-white">{statusValue === 'karyawan tetap' ? 'Permanent Employee' : statusValue === 'karyawan tidak tetap' ? 'Temporary Employee' : (data.status || '-')}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
-                                            <p className="whitespace-nowrap text-black dark:text-white">{data.hak_akses}</p>
+                                            <p className="whitespace-nowrap text-black dark:text-white">{accessRoleValue === 'pegawai' ? 'Employee' : accessRoleValue === 'site_admin' ? 'Site Admin' : accessRoleValue === 'site_manager' ? 'Site Manager' : (data.hak_akses || '-')}</p>
                                         </td>
                                         <td className="border-b border-[#eee] py-5 px-4 dark:border-strokedark">
                                             {isAdmin && (
@@ -380,79 +385,85 @@ const DataPegawai = () => {
                 </div>
 
                 <div className={`${mobileLayout === 'stacked' ? 'grid' : 'hidden'} gap-4 py-4 md:hidden`}>
-                    {filteredDataPegawai.slice(startIndex, endIndex).map((data, index) => (
-                        <div
-                            key={data.id}
-                            className="rounded-lg border border-stroke bg-transparent p-4 dark:border-strokedark"
-                        >
-                            <div className="mb-4 flex items-start justify-between gap-3">
-                                <div>
-                                    <p className="text-xs uppercase tracking-wide text-gray-5 dark:text-gray-4">
-                                        Employee
+                    {filteredDataPegawai.slice(startIndex, endIndex).map((data, index) => {
+                        const genderValue = normalizeValue(data.jenis_kelamin);
+                        const statusValue = normalizeValue(data.status);
+                        const accessRoleValue = normalizeValue(data.hak_akses);
+
+                        return (
+                            <div
+                                key={data.id}
+                                className="rounded-lg border border-stroke bg-transparent p-4 dark:border-strokedark"
+                            >
+                                <div className="mb-4 flex items-start justify-between gap-3">
+                                    <div>
+                                        <p className="text-xs uppercase tracking-wide text-gray-5 dark:text-gray-4">
+                                            Employee
+                                        </p>
+                                        <p className="text-base font-semibold text-black dark:text-white">
+                                            {data.nama_pegawai}
+                                        </p>
+                                    </div>
+                                    <p className="rounded-md bg-gray-2 px-2 py-1 text-xs font-medium text-black dark:bg-meta-4 dark:text-white">
+                                        #{startIndex + index + 1}
                                     </p>
-                                    <p className="text-base font-semibold text-black dark:text-white">
-                                        {data.nama_pegawai}
-                                    </p>
                                 </div>
-                                <p className="rounded-md bg-gray-2 px-2 py-1 text-xs font-medium text-black dark:bg-meta-4 dark:text-white">
-                                    #{startIndex + index + 1}
-                                </p>
-                            </div>
 
-                            <div className="mb-4 flex items-center gap-3">
-                                <div className="h-14 w-14 overflow-hidden rounded-full">
-                                    <img src={`http://localhost:5000/images/${data.photo}`} alt="Profile Photo" />
+                                <div className="mb-4 flex items-center gap-3">
+                                    <div className="h-14 w-14 overflow-hidden rounded-full">
+                                        <img src={`http://localhost:5000/images/${data.photo}`} alt="Profile Photo" />
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-5 dark:text-gray-4">NIK</p>
+                                        <p className="text-sm font-medium text-black dark:text-white">{data.nik}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-sm text-gray-5 dark:text-gray-4">NIK</p>
-                                    <p className="text-sm font-medium text-black dark:text-white">{data.nik}</p>
-                                </div>
-                            </div>
 
-                            <div className="grid grid-cols-2 gap-3">
-                                <div>
-                                    <p className="text-xs text-gray-5 dark:text-gray-4">Gender</p>
-                                    <p className="text-sm text-black dark:text-white">{data.jenis_kelamin}</p>
+                                <div className="grid grid-cols-2 gap-3">
+                                    <div>
+                                        <p className="text-xs text-gray-5 dark:text-gray-4">Gender</p>
+                                        <p className="text-sm text-black dark:text-white">{genderValue === 'laki-laki' ? 'Male' : genderValue === 'perempuan' ? 'Female' : (data.jenis_kelamin || '-')}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-5 dark:text-gray-4">Position</p>
+                                        <p className="text-sm text-black dark:text-white">{data.jabatan || '-'}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-5 dark:text-gray-4">Join Date</p>
+                                        <p className="text-sm text-black dark:text-white">{data.tanggal_masuk}</p>
+                                    </div>
+                                    <div>
+                                        <p className="text-xs text-gray-5 dark:text-gray-4">Status</p>
+                                        <p className="text-sm text-black dark:text-white">{statusValue === 'karyawan tetap' ? 'Permanent Employee' : statusValue === 'karyawan tidak tetap' ? 'Temporary Employee' : (data.status || '-')}</p>
+                                    </div>
+                                    <div className="col-span-2">
+                                        <p className="text-xs text-gray-5 dark:text-gray-4">Access Role</p>
+                                        <p className="text-sm text-black dark:text-white">{accessRoleValue === 'pegawai' ? 'Employee' : accessRoleValue === 'site_admin' ? 'Site Admin' : accessRoleValue === 'site_manager' ? 'Site Manager' : (data.hak_akses || '-')}</p>
+                                    </div>
                                 </div>
-                                <div>
-                                    <p className="text-xs text-gray-5 dark:text-gray-4">Designation</p>
-                                    <p className="text-sm text-black dark:text-white">{data.designation || '-'}</p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-gray-5 dark:text-gray-4">Join Date</p>
-                                    <p className="text-sm text-black dark:text-white">{data.tanggal_masuk}</p>
-                                </div>
-                                <div>
-                                    <p className="text-xs text-gray-5 dark:text-gray-4">Status</p>
-                                    <p className="text-sm text-black dark:text-white">{data.status}</p>
-                                </div>
-                                <div className="col-span-2">
-                                    <p className="text-xs text-gray-5 dark:text-gray-4">Access Role</p>
-                                    <p className="text-sm text-black dark:text-white">{data.hak_akses}</p>
-                                </div>
-                            </div>
 
-                            {isAdmin && (
-                                <div className="mt-4 flex items-center gap-4 border-t border-stroke pt-4 dark:border-strokedark">
-                                    <Link
-                                        to={`/data-pegawai/form-data-pegawai/edit/${data.id}`}
-                                        className="inline-flex items-center gap-2 text-primary"
-                                    >
-                                        <FaRegEdit className="text-xl" />
-                                        <span className="text-sm font-medium">Edit</span>
-                                    </Link>
-                                    <button
-                                        type="button"
-                                        onClick={() => onDeletePegawai(data.id)}
-                                        className="inline-flex items-center gap-2 text-danger"
-                                    >
-                                        <BsTrash3 className="text-xl" />
-                                        <span className="text-sm font-medium">Delete</span>
-                                    </button>
-                                </div>
-                            )}
-                        </div>
-                    ))}
+                                {isAdmin && (
+                                    <div className="mt-4 flex items-center gap-4 border-t border-stroke pt-4 dark:border-strokedark">
+                                        <Link
+                                            to={`/data-pegawai/form-data-pegawai/edit/${data.id}`}
+                                            className="inline-flex items-center gap-2 text-primary"
+                                        >
+                                            <FaRegEdit className="text-xl" />
+                                            <span className="text-sm font-medium">Edit</span>
+                                        </Link>
+                                        <button
+                                            type="button"
+                                            onClick={() => onDeletePegawai(data.id)}
+                                            className="inline-flex items-center gap-2 text-danger"
+                                        >
+                                            <BsTrash3 className="text-xl" />
+                                            <span className="text-sm font-medium">Delete</span>
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 <div className="flex justify-between items-center mt-4 flex-col md:flex-row md:justify-between">

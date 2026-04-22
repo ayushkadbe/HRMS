@@ -8,12 +8,12 @@ class ChartOne extends Component {
     this.state = {
       series: [
         {
-          name: 'Laki-Laki',
+          name: 'Male',
           data: [23, 11, 22, 27, 13, 22, 37, 21, 44, 22, 30, 45],
         },
 
         {
-          name: 'Perempuan',
+          name: 'Female',
           data: [30, 25, 36, 30, 45, 35, 64, 52, 59, 36, 39, 51],
         },
       ],
@@ -142,7 +142,7 @@ class ChartOne extends Component {
                 <span className='block h-2.5 w-full max-w-2.5 rounded-full bg-primary'></span>
               </span>
               <div className='w-full'>
-                <p className='font-semibold text-primary'>Data Laki-Laki</p>
+                <p className='font-semibold text-primary'>Male Data</p>
                 <p className='text-sm font-medium'>14.04.2023 - 14.05.2023</p>
               </div>
             </div>
@@ -151,7 +151,7 @@ class ChartOne extends Component {
                 <span className='block h-2.5 w-full max-w-2.5 rounded-full bg-secondary'></span>
               </span>
               <div className='w-full'>
-                <p className='font-semibold text-secondary'>Data Perempuan</p>
+                <p className='font-semibold text-secondary'>Female Data</p>
                 <p className='text-sm font-medium'>14.04.2023 - 14.05.2023</p>
               </div>
             </div>

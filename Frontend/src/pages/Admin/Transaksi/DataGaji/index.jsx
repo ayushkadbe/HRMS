@@ -95,8 +95,8 @@ const DataGaji = () => {
             setShowMessage(false);
             Swal.fire({
                 icon: 'error',
-                title: 'Data tidak ditemukan',
-                text: 'Maaf, data yang anda cari tidak ditemukan',
+                title: 'Data not found',
+                text: 'The salary data you searched for could not be found.',
                 timer: 2000,
             });
         }
@@ -191,18 +191,18 @@ const DataGaji = () => {
                                     className='relative appearance-none rounded border border-stroke bg-transparent py-2 px-18 outline-none transition focus:border-primary active:border-primary dark:border-form-strokedark dark:bg-form-input'
                                 >
                                     <option value=''>Select Month</option>
-                                    <option value='Januari'>Januari</option>
-                                    <option value='Februari'>Februari</option>
-                                    <option value='Maret'>Maret</option>
+                                    <option value='Januari'>January</option>
+                                    <option value='Februari'>February</option>
+                                    <option value='Maret'>March</option>
                                     <option value='April'>April</option>
-                                    <option value='Mei'>Mei</option>
-                                    <option value='Juni'>Juni</option>
-                                    <option value='Juli'>Juli</option>
-                                    <option value='Agustus'>Agustus</option>
+                                    <option value='Mei'>May</option>
+                                    <option value='Juni'>June</option>
+                                    <option value='Juli'>July</option>
+                                    <option value='Agustus'>August</option>
                                     <option value='September'>September</option>
-                                    <option value='Oktober'>Oktober</option>
+                                    <option value='Oktober'>October</option>
                                     <option value='November'>November</option>
-                                    <option value='Desember'>Desember</option>
+                                    <option value='Desember'>December</option>
                                 </select>
                             </div>
                         </div>
@@ -245,7 +245,7 @@ const DataGaji = () => {
                         }, []).map(data => (data.tahun !== 0 && data.bulan !== 0 &&
                             <h2 className="px-4 py-2 text-black dark:text-white" key={`${data.bulan}-${data.tahun}`}>
                                 Showing Employee Salary Data for Month:
-                                <span className="font-medium"> {data.bulan} </span>
+                                <span className="font-medium"> {data.bulan === 'januari' ? 'January' : data.bulan === 'februari' ? 'February' : data.bulan === 'maret' ? 'March' : data.bulan === 'mei' ? 'May' : data.bulan === 'juni' ? 'June' : data.bulan === 'juli' ? 'July' : data.bulan === 'agustus' ? 'August' : data.bulan === 'oktober' ? 'October' : data.bulan === 'desember' ? 'December' : data.bulan} </span>
                                 Year:
                                 <span className="font-medium"> {data.tahun}</span>
                             </h2>
@@ -328,7 +328,7 @@ const DataGaji = () => {
                                     Overtime <br /> Pay
                                 </th>
                                 <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
-                                    Potongan
+                                    Deduction
                                 </th>
                                 <th className='whitespace-nowrap py-2 px-2 font-medium text-black dark:text-white'>
                                     Total <br /> Salary
@@ -442,7 +442,7 @@ const DataGaji = () => {
                                     <p className='text-sm text-black dark:text-white'>Rp. {data.lembur}</p>
                                 </div>
                                 <div>
-                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Potongan</p>
+                                    <p className='text-xs text-gray-5 dark:text-gray-4'>Deduction</p>
                                     <p className='text-sm text-black dark:text-white'>Rp. {data.potongan}</p>
                                 </div>
                                 <div className='col-span-2'>
