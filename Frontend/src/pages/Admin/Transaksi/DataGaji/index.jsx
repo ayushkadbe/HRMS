@@ -25,12 +25,14 @@ const DataGaji = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const totalPages = Math.ceil(dataGaji.length / ITEMS_PER_PAGE);
+    const safeDataGaji = Array.isArray(dataGaji) ? dataGaji : [];
+
+    const totalPages = Math.ceil(safeDataGaji.length / ITEMS_PER_PAGE);
 
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
     const endIndex = startIndex + ITEMS_PER_PAGE;
 
-    const filteredDataGaji = dataGaji.filter((gajiDataPegawai) => {
+    const filteredDataGaji = safeDataGaji.filter((gajiDataPegawai) => {
         const isMatchBulan =
             filterBulan === "" ||
             (typeof gajiDataPegawai.bulan === 'string' &&

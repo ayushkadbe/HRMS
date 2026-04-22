@@ -16,7 +16,7 @@ const dataGajiReducer = (state = initialState, action) => {
         case GET_DATA_GAJI_SUCCESS:
             return {
                 ...state,
-                dataGaji: action.payload,
+                dataGaji: Array.isArray(action.payload) ? action.payload : [],
                 message: null,
                 error: null,
             };
