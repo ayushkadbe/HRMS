@@ -1,208 +1,185 @@
-<H1 align ="center" >MERN EMPLOYEE SALARY MANAGEMENT<br/>{ SiPeKa }</h1>
-<h5  align ="center"> 
-SiPeKa (Employee Payroll System) is a system used by companies to manage employee payroll processes efficiently and accurately. This system plays a key role in automating various tasks related to payroll, such as calculating payroll, processing attendance, and paying employee wages.<br/> In SiPeKa, employee information such as personal data, position and salary level is stored centrally. Every month, the system will retrieve employee attendance data and perform salary calculations based on the available information. This includes factors such as relevant hours worked, leave, overtime and deductions.</h5>
-<br/>
+# React Assignment
 
-  * [Configuration and Setup](#configuration-and-setup)
-  * [Key Features](#key-features)
-  * [Technologies used](#technologies-used)
-      - [Frontend](#frontend)
-      - [Backend](#backend)
-      - [Database](#database)
-  * [📸 Screenshots](#screenshots)
-  * [Meet The Teams](#meet-the-teams)
-  * [Author](#author)
-  * [License](#license)
+## Chosen HRMS
 
-## Configuration and Setup
+I used the open-source [MERN Employee Salary Management](https://github.com/berthutapea/mern-employee-salary-management) repository because it already has a React frontend, Node/Express backend, and payroll-focused flows that fit the assignment well.
 
-In order to run this project locally, simply fork and clone the repository or download as zip and unzip on your machine.
+## What I Built
 
-- Open the project in your prefered code editor.
-- Go to terminal -> New terminal (If you are using VS code)
-- Split your terminal into two (run the Frontend on one terminal and the server on the other terminal)
+### Part 1: Overtime Entry and Approval
 
-In the first terminal
+Implemented an overtime workflow for site workers with:
 
-```
-$ cd Fronted
-$ npm install (to install Frontend-side dependencies)
-$ npm run dev(to start the Frontend)
-```
+- Overtime entry form for selecting an employee, date, hours, and reason
+- Frontend validation before submission
+- Backend validation on the API
+- Duplicate overtime prevention per worker and date
+- Monthly overtime cap validation
+- Approval and rejection flow for overtime records
+- Payroll integration so approved overtime contributes to salary output
 
-In the second terminal
+### Part 2: Ticket Blitz
 
-- Create your MySQL database, which you will use as your database
-- Supply the following credentials
+Implemented the following tickets as separate commits:
 
-```
-#  --- .env  ---
+- `LF-101`: Payslip dates changed to `DD/MM/YYYY`
+- `LF-102`: Negative salary and deduction amounts blocked with frontend and backend validation
+- `LF-103`: Employee designation uses the existing Position Data source as a dropdown and is shown in the employee list
+- `LF-104`: Employee list CSV export added
+- `LF-105`: Employee list mobile layout improved with stacked and horizontal mobile-friendly views
 
-APP_PORT =5000
-SESS_SECRET =
+## Quick Start
 
-```
+### Prerequisites
 
-```
-# --- Terminal ---
+- Node.js 18+ recommended
+- MySQL
+- npm
 
-$ cd Backend
-$ npm install (to install Backend-side dependencies)
-$ npm start (to start the Backend)
+### 1. Clone the repository
 
+```bash
+git clone <your-fork-url>
+cd mern-employee-salary-management-main
 ```
 
-##  Key Features
+### 2. Import the updated database
 
-- Login Admin
-- Add employee
-- Edit employee
-- Remove employee
-- Add position
-- Edit position
-- Remove position
-- Display data, input attendance, edit attendance and delete employee absences
-- Employee Salary Deduction Setting
-- Display data, input salary data, edit salary data and delete employee salary data
-- Print payroll reports, absences, and payslips
-- Change admin and employee passwords
-- Login Employees/Staff
-- Print employees/staff salary reports from personal accounts
-- 404 Page and many more
-- Responsive Design
+Import the assignment-ready database dump before starting the app.
 
-<br/>
+The database import file is:
 
-##  Technologies used
+- `Backend/db/db_penggajian3.sql`
 
-This project was created using the following technologies.
+This file has been replaced with an updated dump from the current working assignment database so reviewers can load the latest app state directly.
 
-####  Frontend
+Recommended import flow:
 
-- [React JS ](https://www.npmjs.com/package/react) - JavaScript library that is used for building user interfaces specifically for single-page applications
-- [React Hooks  ](https://reactjs.org/docs/hooks-intro.html) - For managing and centralizing application state
-- [React Router Dom](https://www.npmjs.com/package/react-router-dom) - To handle routing
-- [Axios](https://www.npmjs.com/package/axios) - For making Api calls
-- [Tailwind CSS](https://tailwindcss.com/) - For User Interface
-- [React icons](https://react-icons.github.io/react-icons/) - Small library that helps you add icons  to your react apps
-- [Redux](https://redux.js.org/) - Managing complex application state
-- [Localforage](https://localforage.github.io/localForage/) - Saves data in the web browser asynchronously
-- [React Vite](https://vitejs.dev/guide/) - Improved website speed
-- [Redux Toolkit](https://redux-toolkit.js.org/) - To facilitate the development of web applications using Redux
-- [Apexcharts](https://www.npmjs.com/package/apexcharts) - An open source library used to create interactive graphics on websites or web applications
-- [Match Sorter](https://www.npmjs.com/package/match-sorter) - An open source library used to create interactive graphics on websites or web applications
-- [Email JS](https://www.emailjs.com/) - For User Interface
-- [Framer Motion](https://www.framer.com/motion/) - For User Interface
-- [React Redux](https://react-redux.js.org/) - Managing complex application state
-- [React to Print](https://www.npmjs.com/package/react-to-print) - Print PDF
-- [Sweet Alert2](https://sweetalert2.github.io/) - Create various types of pop-up alerts such as regular alerts, error alerts, success alerts, confirmation alerts, and so on.
+```bash
+mysql -u root -p
+```
 
-####  Backend
+```sql
+CREATE DATABASE db_penggajian3;
+EXIT;
+```
 
-- [Node JS](https://nodejs.org/en/) -A runtime environment to help build fast server applications using JS
-- [Express JS](https://www.npmjs.com/package/express) -The server for handling and routing HTTP requests
-- [MySql12](https://www.npmjs.com/package/mysql2) - For authentication
-- [Cors](https://www.npmjs.com/package/cors) - Provides a Connect/Express middleware
-- [Bcrypt JS](https://www.npmjs.com/package/bcryptjs) - For data encryption
-- [Dotenv](https://www.npmjs.com/package/dotenv) - Zero Dependency module that loads environment variables
-- [Nodemon](https://www.npmjs.com/package/nodemon) - To monitor changes to the program code that is being developed
-- [Jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - For authentication
-- [Cookie Parser](https://www.npmjs.com/package/cookie-parser) - A middleware for web frameworks
-- [Sequelize](https://www.npmjs.com/package/sequelize) - An Object-Relational Mapping (ORM) for Node.js that makes it easy to access relational databases such as MySQL, PostgreSQL, and SQLite using the JavaScript programming language.
-- [Argon2](https://www.npmjs.com/package/argon2) - A password-hashing function that summarizes the state of the art in the design of memory-hard functions and can be used to hash passwords for credential storage, key derivation, or other applications.
-- [Connect Session Sequelize](https://www.npmjs.com/package/connect-session-sequelize) - Implement authentication for users with site applications.
+Then import:
 
-####  Database
+```bash
+Get-Content .\Backend\db\db_penggajian3.sql | mysql -u root -p db_penggajian3
+```
 
- - [MySQL ](https://www.mysql.com/) - It provides a free cloud service to store MongoDB collections.
- ##  Screenshots
+After import, optional implementation and review notes are available in:
 
-![img-1](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/a3f72509-8ca0-452b-b121-ff4ecf94580d)
----- -
-![img-2](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/e7998109-d53d-4c93-80eb-f6e9c05f44b4)
---- -
-![img-3](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/f7424cc9-2b63-49af-a2b7-37bd9e79e342)
---- -
-![img-4](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/0c2859cb-2d56-447c-bd19-fabe707988aa)
---- -
-![img-5](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/ed0af932-ea78-44ac-ba91-48eb91449517)
---- -
-![img-6](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/3efac0b3-b2d5-45ec-b82c-82b9b191ffd2)
---- -
-![img-7](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/5d6f9974-7b8e-4c12-a049-44368640dc62)
---- -
-![img-8](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/be9c67c6-376f-450a-9ba3-c968bd9ec063)
---- -
-![img-9](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/8ffef668-7cb1-4004-980c-d2463683ba3b)
---- -
-![img-10](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/8067acac-dc49-4f6e-a6aa-f4baae2fa8a5)
---- -
-![img-11](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/ecd09fb0-1f97-4856-ba4d-28170927e070)
---- -
-![img-12](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/ecdafe57-1b4a-4ddf-9802-7a4c5d3be141)
---- -
-![img-13](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/f5831815-3cd7-4f83-8193-12c16f859023)
---- -
-![img-14](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/8539843c-39f1-4642-84b6-cb9a2a4b09b9)
---- -
-![img-15](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/fd0e75e7-b0d5-4fe8-a477-1a1c8b709ca8)
---- -
-![img-16](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/90f57d70-6547-4a55-8045-f51aa596061a)
---- -
-![img-17](https://github.com/berthutapea/mern-employee-salary-management/assets/111676859/7e0c9850-7c71-4fc3-aa7b-86b323fb1b8b)
+- `docs/DB_report.md`
 
-## Meet The Teams
+That file documents the database work done during the assignment, including:
 
-<center>
-  <table align="center">
-    <tr >
-      <th >Backend Developer</th>
-      <th >Frontend Developer</th>
-    </tr>
-    <tr >
-      <td align="center">
-        <a href="https://github.com/AldiRamdani0401">
-          <img width="200"  src="https://res.cloudinary.com/du541igfh/image/upload/v1690573793/Blog%20Portfolio%20Gilbert/Project/mern-penggajian-karyawan/Aldi_mkw04y.jpg" alt=""><br/>
-          <b>Aldi Ramdani</b>
-        </a>
-      </td>
-      <td align="center">
-        <a href="https://github.com/berthutapea">
-          <img width="200"  src="https://res.cloudinary.com/du541igfh/image/upload/v1690573793/Blog%20Portfolio%20Gilbert/Project/mern-penggajian-karyawan/Gilbert_zx9rbq.jpg" alt=""><br/>
-          <b>Gilbert Hutapea</b>
-        </a>
-      </td>
-    </tr>
-  </table>
-</center>
+- overtime table creation
+- role updates for `site_manager` / `site_admin`
+- login/password notes
+- verification SQL
 
-## Author
-- Portfolio: [berthutapea](https://berthutapea.vercel.app/)
-- Github: [berthutapea](https://github.com/berthutapea)
-- Sponsor: [berthutapea](https://saweria.co/berthutapea)
-- Linkedin: [gilberthutapea](https://www.linkedin.com/in/gilberthutapea/)
-- Email: [berthutapea@gmail.com](mailto:berthutapea@gmail.com)
+Important note:
 
-## License
+- `Backend/db/db_penggajian3.sql` is now the updated assignment dump, not the old upstream base dump
+- `docs/DB_report.md` is supporting documentation for the database changes made during implementation
+- session data is not meant to be reviewed as seeded user data
 
-MIT License
+### 3. Set up the backend
 
-Copyright (c) 2022 Gilbert Hutapea
+```bash
+cd Backend
+npm install
+```
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Create a `.env` file in `Backend/` with the required environment variables:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+```env
+APP_PORT=5000
+SESS_SECRET=your_session_secret
+DB_NAME=your_database_name
+DB_USER=your_database_user
+DB_PASS=your_database_password
+DB_HOST=localhost
+```
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+Start the backend:
+
+```bash
+npm start
+```
+
+### 4. Set up the frontend
+
+Open a second terminal:
+
+```bash
+cd Frontend
+npm install
+npm run dev
+```
+
+### 5. Access the app
+
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:5000`
+
+### Review login credentials
+
+Use these credentials to review the updated app:
+
+Role: username / password
+
+- `admin`: `aldi / admin`
+- `employee`: `budi / employee`
+- `site manager`: `tony / sitemanager`
+
+## AI Tools Used
+
+I used OpenAI Codex, Antigrativity, Cursor, Github Copilot to:
+
+- understand unfamiliar parts of the codebase faster
+- review controller, route, and frontend form flows
+- help debug rebase and commit-history cleanup
+- draft and refine commit messages
+- generate and improve documentation and review notes
+
+All code changes were reviewed in the local repository and adjusted to fit the existing project structure rather than rewriting the app.
+
+## Tickets Handled Differently
+
+- `LF-103`: Instead of introducing a brand-new hardcoded designation enum, I used the repo's existing `Position Data` (`data_jabatan`) as the dropdown source. That matches the existing data model and keeps employee designations aligned with salary/position records already used by the application.
+- `LF-104`: The assignment asks for `name, designation, department, salary`. This repo does not have a separate department field on the employee model, so the CSV export includes the available equivalent fields already modeled in the system: employee name, position/designation, and salary.
+
+## Commit Structure
+
+The branch is organized so that:
+
+- overtime feature work is in separate commit(s)
+- each ticket `LF-101` through `LF-105` is in its own commit
+
+High-level sequence:
+
+- documentation/context setup for understanding the inherited repo
+- baseline repo fixes needed to make the project workable locally
+- overtime feature commits
+- individual LF-101 to LF-105 ticket commits
+- small follow-up fixes and cleanup commits where needed
+
+**Additional non-ticket work done to support delivery:**
+
+- image upload fix on employee creation
+- temporary password reset support for easier local access to inherited seed accounts
+- project-context documentation because the original repo did not include assignment-friendly system context
+- compatibility/cleanup fixes for issues encountered while working through the older codebase
+
+These were kept separate from the LF ticket commits so the requested ticket history remains easy to review.
+
+## Notes
+
+- Additional implementation notes and feature writeups are included under `docs/`
+- LF ticket quick summaries are documented in `docs/LF_Ticket_report.md`
+- Overtime planning notes are documented in `docs/overtime_feature_plan.md`
+- This submission intentionally works within the existing patterns of the chosen HRMS instead of rewriting the architecture
