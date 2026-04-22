@@ -295,6 +295,12 @@ const DataGaji = () => {
                                     Meal <br /> Allowance
                                 </th>
                                 <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                    Overtime <br /> Hours
+                                </th>
+                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
+                                    Overtime <br /> Pay
+                                </th>
+                                <th className='py-2 px-2 font-medium text-black dark:text-white'>
                                     Potongan
                                 </th>
                                 <th className='py-2 px-2 font-medium text-black dark:text-white'>
@@ -329,6 +335,12 @@ const DataGaji = () => {
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
                                             <p className='text-black dark:text-white'>Rp. {data.uang_makan}</p>
+                                        </td>
+                                        <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
+                                            <p className='text-black dark:text-white'>{data.jam_lembur}</p>
+                                        </td>
+                                        <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
+                                            <p className='text-black dark:text-white'>Rp. {data.lembur}</p>
                                         </td>
                                         <td className='border-b border-[#eee] py-5 px-4 text-center dark:border-strokedark'>
                                             <p className='text-black dark:text-white'>Rp. {data.potongan}</p>

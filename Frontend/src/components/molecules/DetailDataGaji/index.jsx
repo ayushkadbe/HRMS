@@ -17,6 +17,8 @@ const DetailDataGaji = () => {
         gaji_pokok: '',
         tj_transport: '',
         uang_makan: '',
+        jam_lembur: '',
+        lembur: '',
         potongan: '',
         total: '',
     });
@@ -154,6 +156,28 @@ const DetailDataGaji = () => {
                             <tr className='bg-gray-50 dark:border-strokedark'>
                                 <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
                                     {index + 4}
+                                </td>
+                                <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
+                                    Overtime Hours
+                                </td>
+                                <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
+                                    {data.jam_lembur}
+                                </td>
+                            </tr>
+                            <tr className='bg-gray-50 dark:border-strokedark'>
+                                <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
+                                    {index + 5}
+                                </td>
+                                <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
+                                    Overtime Pay
+                                </td>
+                                <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
+                                    Rp. {data.lembur}
+                                </td>
+                            </tr>
+                            <tr className='bg-gray-50 dark:border-strokedark'>
+                                <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
+                                    {index + 6}
                                 </td>
                                 <td className='border-b border-[#eee] dark:border-strokedark py-5 px-4 text-black dark:text-white'>
                                     Deduction

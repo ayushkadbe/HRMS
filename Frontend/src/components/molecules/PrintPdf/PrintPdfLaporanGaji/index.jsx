@@ -144,6 +144,12 @@ const PrintPdfLaporanGaji = () => {
                   Meal <br /> Allowance
                 </th>
                 <th className="font-medium text-black border-t border-l border-b border-black dark:border-white dark:text-white">
+                  Overtime <br /> Hours
+                </th>
+                <th className="font-medium text-black border-t border-l border-b border-black dark:border-white dark:text-white">
+                  Overtime <br /> Pay
+                </th>
+                <th className="font-medium text-black border-t border-l border-b border-black dark:border-white dark:text-white">
                   Deduction
                 </th>
                 <th className="font-medium text-black border-t border-l border-b border-r border-black dark:border-white dark:text-white">
@@ -175,6 +181,12 @@ const PrintPdfLaporanGaji = () => {
                     </td>
                     <td className="border-b border-l border-black dark:border-white py-5 text-center">
                       <p className="text-black dark:text-white">Rp. {data.uang_makan}</p>
+                    </td>
+                    <td className="border-b border-l border-black dark:border-white py-5 text-center">
+                      <p className="text-black dark:text-white">{data.jam_lembur}</p>
+                    </td>
+                    <td className="border-b border-l border-black dark:border-white py-5 text-center">
+                      <p className="text-black dark:text-white">Rp. {data.lembur}</p>
                     </td>
                     <td className="border-b border-l border-black dark:border-white py-5 text-center">
                       <p className="text-black dark:text-white">Rp. {data.potongan}</p>

@@ -121,3 +121,40 @@ MYSQL PASSWORD TROUBLESHOOTING:
   - User: `root`
   - Password: `KDWheaven`
 - If phpMyAdmin/CMD prompts for a password or denies access, use the password from `Database.js` to keep runtime and CLI credentials aligned.
+
+PHASE 2 (PAYROLL INTEGRATION) - DB NOTES:
+
+- No new table or migration is required for Phase 2.
+- Phase 2 uses existing `data_lembur` records and only counts rows where:
+
+```sql
+status = 'approved'
+```
+
+- Optional verification commands before running app:
+
+```sql
+USE db_penggajian3;
+
+-- Check approved overtime rows
+SELECT id, pegawai_id, nama_pegawai, tanggal_lembur, jam_lembur, status
+FROM data_lembur
+WHERE status = 'approved'
+ORDER BY tanggal_lembur DESC;
+
+-- Validate monthly overtime summary per worker
+SELECT
+  pegawai_id,
+  YEAR(tanggal_lembur) AS tahun,
+  MONTH(tanggal_lembur) AS bulan_angka,
+  SUM(jam_lembur) AS total_jam_lembur
+FROM data_lembur
+WHERE status = 'approved'
+GROUP BY pegawai_id, YEAR(tanggal_lembur), MONTH(tanggal_lembur)
+ORDER BY tahun DESC, bulan_angka DESC;
+```
+
+- App-level overtime formula used in Phase 2.2 backend:
+  - `tarif_lembur_per_jam = (gaji_pokok / 30 / 8) * overtime_multiplier`
+  - `overtime_multiplier` currently set to `1`
+  - no DB schema change required for this adjustment

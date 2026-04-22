@@ -60,6 +60,8 @@ export const viewDataGajiSinglePegawaiByMonth = async (req, res) => {
             gaji_pokok: data_gaji.gaji_pokok,
             tj_transport: data_gaji.tj_transport,
             uang_makan: data_gaji.uang_makan,
+            jam_lembur: data_gaji.jam_lembur,
+            lembur: data_gaji.lembur,
             potongan: data_gaji.potongan,
             total_gaji: data_gaji.total,
           };
@@ -101,6 +103,8 @@ export const viewDataGajiSinglePegawaiByYear = async (req, res) => {
             gaji_pokok: data_gaji.gaji_pokok,
             tj_transport: data_gaji.tj_transport,
             uang_makan: data_gaji.uang_makan,
+            jam_lembur: data_gaji.jam_lembur,
+            lembur: data_gaji.lembur,
             potongan: data_gaji.potongan,
             total_gaji: data_gaji.total,
         };

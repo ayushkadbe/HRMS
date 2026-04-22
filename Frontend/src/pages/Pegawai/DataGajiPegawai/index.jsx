@@ -173,6 +173,12 @@ const DataGajiPegawai = () => {
                   Meal Allowance
                 </th>
                 <th className="px-4 py-4 font-medium text-black dark:text-white">
+                  Overtime Hours
+                </th>
+                <th className="px-4 py-4 font-medium text-black dark:text-white">
+                  Overtime Pay
+                </th>
+                <th className="px-4 py-4 font-medium text-black dark:text-white">
                   Deduction
                 </th>
                 <th className="px-4 py-4 font-medium text-black dark:text-white">
@@ -212,6 +218,16 @@ const DataGajiPegawai = () => {
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
                         <p className="text-black dark:text-white">
                           Rp. {data.uang_makan}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          {data.jam_lembur}
+                        </p>
+                      </td>
+                      <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">
+                        <p className="text-black dark:text-white">
+                          Rp. {data.lembur}
                         </p>
                       </td>
                       <td className="border-b border-[#eee] px-4 py-5 dark:border-strokedark">

@@ -35,6 +35,8 @@ export const viewLaporanGajiPegawaiByMonth = async (req, res) => {
                     gaji_pokok: data.gaji_pokok,
                     tj_transport: data.tj_transport,
                     uang_makan: data.uang_makan,
+                    jam_lembur: data.jam_lembur,
+                    lembur: data.lembur,
                     potongan: data.potongan,
                     total_gaji: data.total
                 };
@@ -191,6 +193,8 @@ export const viewSlipGajiByMonth = async (req, res) => {
                     gaji_pokok: data.gaji_pokok,
                     tj_transport: data.tj_transport,
                     uang_makan: data.uang_makan,
+                    jam_lembur: data.jam_lembur,
+                    lembur: data.lembur,
                     potongan: data.potongan,
                     total_gaji: data.total
                 };

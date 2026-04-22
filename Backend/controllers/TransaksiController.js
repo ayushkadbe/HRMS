@@ -640,6 +640,58 @@ export const getDataPotongan = async () => {
   return resultDataPotongan;
 };
 
+const OVERTIME_MULTIPLIER = 1;
+const NAMA_BULAN = [
+  "januari",
+  "februari",
+  "maret",
+  "april",
+  "mei",
+  "juni",
+  "juli",
+  "agustus",
+  "september",
+  "oktober",
+  "november",
+  "desember",
+];
+
+export const getDataLemburApproved = async () => {
+  try {
+    const dataLembur = await DataLembur.findAll({
+      attributes: ["pegawai_id", "tanggal_lembur", "jam_lembur"],
+      where: {
+        status: "approved",
+      },
+      distinct: true,
+    });
+
+    const groupedLembur = new Map();
+
+    dataLembur.forEach((lembur) => {
+      const tanggal = new Date(lembur.tanggal_lembur);
+      const tahun = tanggal.getFullYear();
+      const bulan = NAMA_BULAN[tanggal.getMonth()];
+      const key = `${lembur.pegawai_id}-${tahun}-${bulan}`;
+      const jamLembur = Number(lembur.jam_lembur || 0);
+      const current = groupedLembur.get(key) || {
+        pegawai_id: lembur.pegawai_id,
+        tahun,
+        bulan,
+        total_jam_lembur: 0,
+      };
+
+      current.total_jam_lembur += jamLembur;
+      groupedLembur.set(key, current);
+    });
+
+    return Array.from(groupedLembur.values());
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
 // Logika matematika
 export const getDataGajiPegawai = async () => {
   try {
@@ -671,6 +723,7 @@ export const getDataGajiPegawai = async () => {
     // Potongan Pegawai :
     const resultDataKehadiran = await getDataKehadiran();
     const resultDataPotongan = await getDataPotongan();
+    const resultDataLembur = await getDataLemburApproved();
 
     const potongan_pegawai = resultDataKehadiran.map((kehadiran) => {
       const potonganAlpha = kehadiran.alpha > 0 ?
@@ -705,15 +758,27 @@ export const getDataGajiPegawai = async () => {
       const potongan = potongan_pegawai.find(
         (potongan) => potongan.nama_pegawai === pegawai.nama_pegawai
       );
+      const periodeTahun = potongan ? potongan.tahun : kehadiran ? kehadiran.tahun : 0;
+      const periodeBulan = potongan ? potongan.bulan : kehadiran ? kehadiran.bulan : 0;
+      const lembur = resultDataLembur.find(
+        (item) =>
+          item.pegawai_id === pegawai.id &&
+          item.tahun === periodeTahun &&
+          item.bulan === periodeBulan
+      );
+      const totalJamLembur = lembur ? lembur.total_jam_lembur : 0;
+      const tarifLemburPerJam = (pegawai.gaji_pokok / 30 / 8) * OVERTIME_MULTIPLIER;
+      const totalLembur = Math.round(totalJamLembur * tarifLemburPerJam);
       const total_gaji =
       (pegawai.gaji_pokok +
       pegawai.tj_transport +
       pegawai.uang_makan -
-      (potongan ? potongan.total_potongan : 0)).toLocaleString();
+      (potongan ? potongan.total_potongan : 0) +
+      totalLembur).toLocaleString();
 
       return {
-        tahun: potongan ? potongan.tahun : kehadiran ? kehadiran.tahun : 0,
-        bulan: potongan ? potongan.bulan : kehadiran ? kehadiran.bulan : 0,
+        tahun: periodeTahun,
+        bulan: periodeBulan,
         id: id,
         nik: pegawai.nik,
         nama_pegawai: pegawai.nama_pegawai,
@@ -721,9 +786,11 @@ export const getDataGajiPegawai = async () => {
         gaji_pokok: pegawai.gaji_pokok.toLocaleString(),
         tj_transport: pegawai.tj_transport.toLocaleString(),
         uang_makan: pegawai.uang_makan.toLocaleString(),
-        hadir: kehadiran.hadir,
-        sakit: kehadiran.sakit,
-        alpha: kehadiran.alpha,
+        hadir: kehadiran?.hadir || 0,
+        sakit: kehadiran?.sakit || 0,
+        alpha: kehadiran?.alpha || 0,
+        jam_lembur: totalJamLembur,
+        lembur: totalLembur.toLocaleString(),
         potongan: potongan ? potongan.total_potongan.toLocaleString() : 0,
         total: total_gaji,
       };
@@ -768,6 +835,8 @@ export const viewDataGajiPegawaiByName = async (req, res) => {
           gaji_pokok: data_gaji.gaji_pokok,
           tj_transport: data_gaji.tj_transport,
           uang_makan: data_gaji.uang_makan,
+          jam_lembur: data_gaji.jam_lembur,
+          lembur: data_gaji.lembur,
           potongan: data_gaji.potongan,
           total_gaji: data_gaji.total,
         };
@@ -855,6 +924,8 @@ export const viewDataGajiPegawaiByMonth = async (req, res) => {
             gaji_pokok: data_gaji.gaji_pokok,
             tj_transport: data_gaji.tj_transport,
             uang_makan: data_gaji.uang_makan,
+            jam_lembur: data_gaji.jam_lembur,
+            lembur: data_gaji.lembur,
             potongan: data_gaji.potongan,
             total_gaji: data_gaji.total,
           };
@@ -895,6 +966,8 @@ export const viewDataGajiPegawaiByYear = async (req, res) => {
           gaji_pokok: data_gaji.gaji_pokok,
           tj_transport: data_gaji.tj_transport,
           uang_makan: data_gaji.uang_makan,
+          jam_lembur: data_gaji.jam_lembur,
+          lembur: data_gaji.lembur,
           potongan: data_gaji.potongan,
           total_gaji: data_gaji.total,
         };
@@ -933,6 +1006,8 @@ export const dataLaporanGajiByYear = async (req, res) => {
           gaji_pokok: data_gaji.gaji_pokok,
           tj_transport: data_gaji.tj_transport,
           uang_makan: data_gaji.uang_makan,
+          jam_lembur: data_gaji.jam_lembur,
+          lembur: data_gaji.lembur,
           potongan: data_gaji.potongan,
           total_gaji: data_gaji.total,
         };
